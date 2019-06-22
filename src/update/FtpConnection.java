@@ -21,7 +21,7 @@ public class FtpConnection{
 	private FTPClient ftpClient;
 	private String ftpAddress;
 	private String user = "anonymous";//username default value
-	private String password = "rajkoda@gmail.com";//password. e-mail address
+	private String password = "dingo.lab180@gmail.com";//password. e-mail address
 	int port = 21;
 	
 	private FtpConnection(){
