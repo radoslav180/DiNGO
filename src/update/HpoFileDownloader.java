@@ -67,14 +67,20 @@ public class HpoFileDownloader implements IFileDownload {
             }
         }
     }
-
+    
+    //parses line from ALL_SOURCES_ALL_FREQUENCIES_genes_to_phenotype.txt (https://hpo.jax.org/app/download/annotation) and extracts info
+    //about gene and associated HPO term ID.
+    //The input file has the following header : 
+    //#Format: entrez-gene-id<tab>entrez-gene-symbol<tab>HPO-Term-Name<tab>HPO-Term-ID
+    //Input line: 8192	CLPP	Seizures	HP:0001250
+    //Output line: CLPP=0001250
     private void writeLineToFile(String line, String phenotypeAnnotationFileAddress, BufferedWriter writer) throws IOException {
 
         if (termToSubontology.isEmpty()) {
             initTermToSubontology(phenotypeAnnotationFileAddress);
         }
 
-        if (!line.startsWith("#")) {//first line starts with # so skip it
+        if (!line.startsWith("#")) {//if line starts with # that is header
             String[] tokens = line.split("\\t");
             if (termToSubontology.containsKey(tokens[3]) && (termToSubontology.get(tokens[3]).equals(hpOntology)
                     || hpOntology.equals("W"))) {
