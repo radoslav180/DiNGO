@@ -25,7 +25,7 @@
 ## 1. Introduction
 DiNGO is a standalone application based on open source code from BiNGO [1] a Java based tool aimed to determine which Gene Ontology (GO) categories are overrepresented in a set of genes. DiNGO is a command line application which is able to do GO and HPO term enrichment on a set of genes or proteins. Also, there are additional modules that brings new functionalities to DiNGO.
 ## 2. Installation
-Download DiNGO.zip file and extract contents. There should be DiNGO.jar file and folder configuration containing conf.properties file. The file defines parameters necessary for program execution.
+Download [DiNGO.zip](https://www.vin.bg.ac.rs/180/tools/DiNGO.php) file and extract contents. There should be DiNGO.jar file and folder configuration containing conf.properties file. The file defines parameters necessary for program execution.
 ## 3. Requirements
 Java Runtime Enviroment (JRE) 1.8
 
