@@ -20,7 +20,8 @@
    - ## 5.2. Mapping module
         - ## 5.2.1. Usage
    - ## 5.3. Propagation module
-## 6. References
+## 6. Dependencies
+## 7. References
 
 ## 1. Introduction
 DiNGO is a standalone application based on open source code from BiNGO [1] a Java based tool aimed to determine which Gene Ontology (GO) categories are overrepresented in a set of genes. DiNGO is a command line application which is able to do GO and HPO term enrichment on a set of genes or proteins. Also, there are additional modules that brings new functionalities to DiNGO.
@@ -132,7 +133,7 @@ Mapping module converts one set of identifiers (IDs) to another one. The tool is
 
 The following example will convert gene symbols identifiers to uniprot ones taking into consideration only manually curated entries:
 
-`java -cp DiNGO.jar uniprot.UniprotMappingParser -t UniProtKB -f Gene_Name -m HUMAN_9606_idmapping.dat -s uniprot_sprot.fasta`
+`java -cp DiNGO.jar uniprot.UniprotMappingParser -i input_file -t UniProtKB -f Gene_Name -m HUMAN_9606_idmapping.dat -s uniprot_sprot.fasta`
 
 As result file mapping.tab will be created. The file contains two columns separated by TAB. The first column contains gene symbol IDs and the second contains uniprot IDs.
 
@@ -146,7 +147,14 @@ Propagation module function is to add namespace information to each term in HPO 
 
 `java -cp Dingo.jar propagation.Propagation -i <input HPO obo file> -o <output OBO file>`
 
-## 6. References
+## 6. Dependencies
+
+Before building DiNGO from source the following dependencies must be satisfied:
+- [colt.jar](https://dst.lbl.gov/ACSSoftware/colt)
+- [commons-net-3.6.jar](https://commons.apache.org/proper/commons-net/index.html)
+- [jdom-2.0.6.jar](http://www.jdom.org/downloads/)
+
+## 7. References
 
 [1]	Maere S, Heymans K, Kuiper M. BiNGO: a Cytoscape plugin to assess overrepresentation of gene ontology categories in biological networks. Bioinforma Oxf Engl 2005;21:3448–9. doi:10.1093/bioinformatics/bti551.
 
