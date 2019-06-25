@@ -126,7 +126,7 @@ public class Propagation {
         return false;
     }
 
-    //build map from obo file. Key is GO term id, value is Set containing GO terms with is_a relations to the key value
+    //build map from obo file. Key is HPO term id, value is Set containing HPO terms with is_a relations to the key value
     private void buildSynonymsMap() {
         BufferedReader reader;
         try {
