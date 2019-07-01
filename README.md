@@ -97,7 +97,7 @@ DiNGO’s functionality is extended by three modules: update, mapping and propag
 
 ### 5.1. Update module
 
-The update module performs download and processing of GO and HPO annotation resources upon user request. This functionality enables user to do enrichment analysis based on up-to-date ontology and annotation files. In addition, the module offers option for downloading [UniProt](ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/) [2] and [HUGO Gene Nomenclature Committee (HGNC)](https://www.genenames.org/) [3] mapping files as well as SwissProt uniprot_sprot.dat file.
+The update module performs download and processing of GO and HPO annotation resources upon user request. This functionality enables user to do enrichment analysis based on up-to-date ontology and annotation files. In addition, the module offers option for downloading UniProt (ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/) [2] and [HUGO Gene Nomenclature Committee (HGNC)](https://www.genenames.org/) [3] mapping files as well as SwissProt uniprot_sprot.dat file.
 
 #### 5.1.1. GO files
 
