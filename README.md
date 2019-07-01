@@ -109,7 +109,7 @@ The module downloads HPO OBO file and two annotation files: phenotype_annotation
 
 #### 5.1.3. Uniprot mapping files
 
-Module downloads UniProt mapping file which can be used by mapping module. Detailed explanation of the file structure can be found at the following [link](ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/README). The file is downloaded into mapping folder. 
+Module downloads UniProt mapping file which can be used by mapping module. Detailed explanation of the file structure can be found at the following link: ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/README. The file is downloaded into mapping folder. 
 
 #### 5.1.4. SwissProt file
 
