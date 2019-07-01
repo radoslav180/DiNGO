@@ -125,7 +125,17 @@ public class BingoRunner implements Runnable {
         ecCodes.add("IC");
         ecCodes.add("NR");
     }
-
+    
+    /**
+    *<p>Constructor</p>
+    *
+    *@param parser contains info collected from annotation and ontology files
+    *@param descriptor contains description of statistical test
+    *@params selectedNodes user input
+    *@params clusterName name of protein/gene cluster that is used for result file naming
+    *@params outputDir path to folder where result file will be saved
+    *@params numberOfClusters number of clusters in input file
+    */
     public BingoRunner(AnnotationParser parser, StatisticsDescriptor descriptor, String selectedNodes,
                        String clusterName, String outputDir, int numberOfClusters){
         this();
@@ -396,8 +406,6 @@ public class BingoRunner implements Runnable {
         CreateBiNGOFile file;
         file = new CreateBiNGOFile(test, correction, parser, descriptor, selectedNodes, noClassificationsSet, outputDir,
                 clusterName, Constants.CATEGORY_CORRECTION.getConstant());
-        //file = new CreateBiNGOFile(test, correction, params, selectedNodes,
-                //noClassificationsSet, ontologyType);
         file.writeToFile();
         //monitor progress with "progress bar"
         int count = counter.getAndIncrement();
