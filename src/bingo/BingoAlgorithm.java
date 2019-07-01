@@ -13,25 +13,23 @@ import java.util.Set;
  * Modified by Radoslav Davidović July 11, 2018.
  * <ol>Changes:
  *  <li>Constant variables removed</li>
+ * <li>new constructor {@link #BingoAlgorithm(ontology.Annotation, ontology.Ontology, 
+ * bingo.StatisticsDescriptor, java.util.Map, java.util.Set, java.util.Set) }</li>
+ * <li>old constructor removed</li>
+ * <li>instance variable of type {@link BingoParameters} removed</li>
+ * <li>new instance variable of type {@link StatisticsDescriptor}</li>
+ * <li>new instance variables of type {@link Annotation} and {@link Ontology}</li>
+ * <li>new instance variables {@link #selectedNodes}, {@link #allNodes} and {@link #alias}</li>
  *  <li>method {@link #calculate_distribution()} has been changed to be in line with upstream changes</li>
  * </ol>
  */
 public class BingoAlgorithm {
-    // parameters to use for the calculations.
-    private BingoParameters params;
     private StatisticsDescriptor descriptor;
-    Map<String, HashSet<String>> alias;
+    private Map<String, HashSet<String>> alias;
     private Set<String> selectedNodes;
     private Set<String> allNodes;
     private Annotation annotation;
     private Ontology ontology;
-
-
-    public BingoAlgorithm(BingoParameters params, Set<String> selectedNodes, Set<String> allNodes) {
-        this.params = params;
-        this.selectedNodes = selectedNodes;
-        this.allNodes = allNodes;
-    }
 
     public BingoAlgorithm(Annotation annotation, Ontology ontology, StatisticsDescriptor descriptor,
                           Map<String, HashSet<String>> alias, Set<String> selectedNodes, Set<String> allNodes){
