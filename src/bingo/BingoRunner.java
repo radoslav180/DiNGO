@@ -86,26 +86,37 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <li>instance variable of type CyNetworkView removed</li>
  * <li>instance variable of type CyNetwork removed</li>
  * <li>instance variable of type TaskMonitor removed</li>
+ * <li>added instance variable {@link #parser}</li>
+ * <li>added instance variable {@link #descriptor}</li>
+ * <li>added instance variable {@link #numberOfClusters}</li>
+ * <li>added instance variable {@link #outputDir}</li>
+ * <li>added instance variable {@link #selectedNodes}</li>
  * </ul>
  * </p> *********************************************************************
  */
 public class BingoRunner implements Runnable {
-
+    //contains info obtained by parsing annotation and ontology files
     private AnnotationParser parser;
+    //Contains info abot statistical test
     private StatisticsDescriptor descriptor;
+    
     private String ontologyType;
+    //contains evidence codes
     private Set<String> ecCodes;
     private Map<String, Set<String>> redundantIDs = new HashMap<>();
-
+    //input gene/protein identifiers
     private String selectedNodes;
+    //name of cluster i.e. output file
     private String clusterName;
+     //folder where output files are saved
     private String outputDir;
+    //number of clusters
     private int numberOfClusters;
     //follows number of threads
     private static AtomicInteger counter = new AtomicInteger(1);
 
     /**
-     * Constructor with all the settings of the settings panel as arguments.
+     * Constructor without parameters. Initialize evidence codes.
      *
      */
     public BingoRunner() {
@@ -149,7 +160,7 @@ public class BingoRunner implements Runnable {
     }
 
     /**
-     * actual work is going here
+     * <p>Method that do all calculations</p>
      */
     public void actionPerformed() {
 
