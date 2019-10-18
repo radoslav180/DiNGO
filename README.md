@@ -20,8 +20,12 @@
    - ## 5.2. Mapping module
         - ## 5.2.1. Usage
    - ## 5.3. Propagation module
-## 6. Dependencies
-## 7. References
+## 6. Usage examples
+   - ## 6.1 Enrichment analysis with default ontology and annotation files
+   - ## 6.2 Enrichment analysis with user defined ontology and annotation files
+   - ## 6.3 Use of mapping files
+## 7. Dependencies
+## 8. References
 
 ## 1. Introduction
 DiNGO is a standalone application based on open source code from BiNGO [1] a Java based tool aimed to determine which Gene Ontology (GO) categories are overrepresented in a set of genes. DiNGO is a command line application which is able to do GO and HPO term enrichment on a set of genes or proteins. Also, there are additional modules that brings new functionalities to DiNGO.
@@ -147,14 +151,69 @@ Propagation module function is to add namespace information to each term in HPO 
 
 `java -cp Dingo.jar propagation.Propagation -i <input HPO obo file> -o <output OBO file>`
 
-## 6. Dependencies
+## 6. Usage examples
+Setting up DiNGO for enrichment analysis is straightforward. The following examples demonstrate common usage scenarios.
+
+### 6.1. Enrichment analysis with default ontology and annotation files
+
+The following example demonstrates how to do enrichment analysis of HPO terms on the gene set contained in [cosmic_list.txt](datasets/cosmic_list.txt). The file contains 723 genes represented by its gene symbols.
+In order to do enrichment analysis the user has to specify input file (cosmic_list.txt), output file which will contain results of the analysis, ontology (HPO) and namespace (subontology, in this case phenotypic abnormality). Taking into consideration all of the aforementioned, DiNGO is invoked in the following manner:
+
+`java -jar Dingo.jar -i cosmic_list.txt -o results -e HPO -ns O`
+
+Given that ontology and annotation files are not specified, the application will try to use default ones located in annotations folder. In the case that the files do not exists, DiNGO will run update module in order to download appropriate files.
+
+![first_run_update](img/first_run_update.png)
+
+After successful download, DiNGO will proceed with enrichment analysis. The results will be stored in the output file named results.bgo. Note that cosmic_list.txt is located in the same folder as Dingo jar file is.
+
+![first_run_done](img/first_run_done.png)
+
+The output file contains header with info about running parameters and table with results (see picture below).
+
+![Dingo_output](img/Dingo_output.png)
+
+In the above case the application will use default p value (0.05), hypergeometric test and Benjamini & Hochberg False Discovery Rate (FDR) correction. It is very easy to change these parameters:
+
+`java -jar Dingo.jar -i cosmic_list.txt -o results -e HPO -ns O -p 0.01 -st 2 -ct 2`
+
+In the above example p value is set to 0.01, DiNGO uses Binomial test (-st flag) and Bonferroni Family-Wise Error Rate (FWER) correction (-ct flag). It is possible to make DiNGO not to calculate adjusted p values (-ct 3).
+
+### 6.2 Enrichment analysis with user defined ontology and annotation files
+
+DiNGO allows usage of user defined ontology and annotation files.  For example, if user wants to use OBO file other than default one, it is necessary to  pass full file name to DiNGO:
+
+`java -jar Dingo.jar -i cosmic_list.txt -o results -e HPO -ns O -of /path/to/file/go.obo`
+
+In the case of non-default annotation file:
+
+`java -jar Dingo.jar -i cosmic_list.txt -o results -e HPO -ns O -af /path/to/file/gene_association.gaf`
+
+### 6.3 Use of mapping files
+
+DiNGO supports only gene/protein IDs if they are included in the annotation file. For example, GAF files contain UniProtKB and gene symbol IDs. If user wants to do GO term enrichment analysis on the gene list contained in the file [entrez_list.txt](datasets/entrez_list.txt), which contains Entrez IDs, the program won’t be able to do enrichment analysis due to unsupported IDs in the input file:
+
+![unsupprotedIDs](img/unsupportedIDs.png)
+
+This issue can be solved by passing a mapping file as an argument to DiNGO. Mapping file is TAB delimited file which contains in one column supported IDs and in other column(s) appropriate unsupported IDs. There are several ways to create mapping file. DiNGO offers two possibilities. The first one is usage of Mapping module (see appropriate section) and the second one is usage of HUGO mapping file (see appropriate section). In addition, user is free to employ any other mapping tool to create mapping file. 
+
+Based on above, before we run DiNGO we have to map Entrez IDs to either UniProtKB or gene symbol IDs. Using DiNGO mapping tool to convert Entrez IDs to Uniprot IDs is as following:
+
+![mapping_tools](img/mapping_tools.png)
+
+Mapping tool will create mapping.tab file in the folder where DiNGO jar file is located. Also, the program reports if there are some not mapped entries.
+Now user can run DiNGO in the following way:
+
+![mapping_file](img/mapping_file.png)
+
+## 7. Dependencies
 
 Before building DiNGO from source the following dependencies must be satisfied:
 - [colt.jar](https://dst.lbl.gov/ACSSoftware/colt)
 - [commons-net-3.6.jar](https://commons.apache.org/proper/commons-net/index.html)
 - [jdom-2.0.6.jar](http://www.jdom.org/downloads/)
 
-## 7. References
+## 8. References
 
 [1]	Maere S, Heymans K, Kuiper M. BiNGO: a Cytoscape plugin to assess overrepresentation of gene ontology categories in biological networks. Bioinforma Oxf Engl 2005;21:3448–9. doi:10.1093/bioinformatics/bti551.
 
