@@ -195,7 +195,7 @@ DiNGO supports only gene/protein IDs if they are included in the annotation file
 
 ![unsupprotedIDs](img/unsupportedIDs.png)
 
-This issue can be solved by passing a mapping file as an argument to DiNGO. Mapping file is TAB delimited file which contains in one column supported IDs and in other column(s) appropriate unsupported IDs. There are several ways to create mapping file. DiNGO offers two possibilities. The first one is usage of Mapping module (see [Mapping module](#5.2.-mapping-module)) and the second one is usage of HUGO mapping file (see appropriate section). In addition, user is free to employ any other mapping tool to create mapping file. 
+This issue can be solved by passing a mapping file as an argument to DiNGO. Mapping file is TAB delimited file which contains in one column supported IDs and in other column(s) appropriate unsupported IDs. There are several ways to create mapping file. DiNGO offers two possibilities. The first one is usage of Mapping module (see [Mapping module](#mapping-module)) and the second one is usage of HUGO mapping file (see appropriate section). In addition, user is free to employ any other mapping tool to create mapping file. 
 
 Based on above, before we run DiNGO we have to map Entrez IDs to either UniProtKB or gene symbol IDs. Using DiNGO mapping tool to convert Entrez IDs to Uniprot IDs is as following:
 
