@@ -131,7 +131,7 @@ The application has three options. The option -f defines file type that should b
 
 ### 5.2. Mapping module
 
-Mapping module converts one set of identifiers (IDs) to another one. The tool is inspired by [UniProt mapping tool](https://www.uniprot.org/uploadlists/). Mapping module relies on Uniprot idmapping.dat and SwiProt uniprot_sprot.fasta files (see Update Module section). As an input the module accepts list of IDs (one ID per line). The output file contains input IDs in the first column and required IDs in the second one. Note that like UniProt mapping tool, the module requires that input IDs or output ones to be UniProt identifiers. In other words, it is possible to convert gene symbols to UniProt IDs, but it is not possible to convert gene symbols to Ensembl gene IDs. The module can be run as standalone application.
+Mapping module converts one set of identifiers (IDs) to another one. The tool is inspired by [UniProt mapping tool](https://www.uniprot.org/uploadlists/). Mapping module relies on Uniprot idmapping.dat and SwiProt uniprot_sprot.fasta files (see [Update Module](#51-update-module-1) section). As an input the module accepts list of IDs (one ID per line). The output file contains input IDs in the first column and required IDs in the second one. Note that like UniProt mapping tool, the module requires that input IDs or output ones to be UniProt identifiers. In other words, it is possible to convert gene symbols to UniProt IDs, but it is not possible to convert gene symbols to Ensembl gene IDs. The module can be run as standalone application.
 
 #### 5.2.1. Usage
 
