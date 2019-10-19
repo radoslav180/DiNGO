@@ -44,7 +44,7 @@ If everything is ok help text should appear.
 
 ### 4.1. First run
 
-When DiNGO is run for the first time it will create three folders: annotations, download and mapping. The first folder is intended to contain default ontology and annotation files. The files can be downloaded and updated by using update module (see Update Module section). Downloaded files are temporally placed in download folder. The third folder, mapping, is location where DiNGO downloads UniProt, HUGO and SwissProt files (see Update Module section).
+When DiNGO is run for the first time it will create three folders: annotations, download and mapping. The first folder is intended to contain default ontology and annotation files. The files can be downloaded and updated by using update module (see [Update module](#51-update-module-1) section). Downloaded files are temporally placed in download folder. The third folder, mapping, is location where DiNGO downloads UniProt, HUGO and SwissProt files (see Update Module section).
 
 ### 4.2. Command line options
 
