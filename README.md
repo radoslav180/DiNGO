@@ -28,64 +28,65 @@
 ## 8. References
 
 ## 1. Introduction
-DiNGO is a standalone application based on open source code from BiNGO [1] a Java based tool aimed to determine which Gene Ontology (GO) categories are overrepresented in a set of genes. DiNGO is a command line application which is able to do GO and HPO term enrichment on a set of genes or proteins. Also, there are additional modules that brings new functionalities to DiNGO.
+DiNGO is a standalone application based on an open source code from BiNGO [1], a Java based tool aimed at determining which Gene Ontology (GO) categories are overrepresented in a set of genes. DiNGO is a command line application which is able to perform GO and HPO term enrichment on a set of genes or proteins. Also, there are additional modules that bring new functionalities to DiNGO.
 ## 2. Installation
-Download [DiNGO.zip](https://www.vin.bg.ac.rs/180/tools/DiNGO.php) file and extract contents. There should be DiNGO.jar file and folder configuration containing conf.properties file. The file defines parameters necessary for program execution.
+Download [DiNGO.zip](https://www.vin.bg.ac.rs/180/tools/DiNGO.php) file and extract contents. There should be a DiNGO.jar file and folder configuration containing the conf.properties file. The file defines the parameters necessary for program execution.
 ## 3. Requirements
-Java Runtime Enviroment (JRE) 1.8
+Java Runtime Environment (JRE) 1.8
 
 ## 4. Usage
 
-To run DiNGO open terminal (Command prompt in Windows) in folder where jar file is located and type following:
+To run DiNGO open the terminal (Command prompt in Windows) in the folder where the jar file is located and type the following:
 
 `java -jar Dingo.jar -h`
 
-If everything is ok help text should appear.
+If everything is ok the help text should appear.
 
 ### 4.1. First run
 
-When DiNGO is run for the first time it will create three folders: annotations, download and mapping. The first folder is intended to contain default ontology and annotation files. The files can be downloaded and updated by using update module (see [Update module](#51-update-module-1) section). Downloaded files are temporally placed in download folder. The third folder, mapping, is location where DiNGO downloads UniProt, HUGO and SwissProt files (see Update Module section).
+When DiNGO is run for the first time it will create three folders: annotations, download and mapping. The first folder should contain default ontology and annotation files. The files can be downloaded and updated by using the update module (see [the Update module](#51-update-module-1) section). The downloaded files are temporally placed in the download folder. The third folder, mapping, is located where DiNGO downloads the UniProt, HUGO and SwissProt files (see the Update Module section).
 
 ### 4.2. Command line options
 
-There are several options that should be defined in order to do enrichment analysis. The -o option defines name of the output file that contains results. The -i option defines name of file containing list of gene/proteins (one gene/protein per line). It is mandatory to define namespace (subontology) for which enrichment analysis will be run. For example -ns BP means that only terms belonging to biological process subontology will be taken into consideration. In order to specify species it is necessary to use -s option. Basically, it is possible to run GO enrichment analysis typing following:
+There are several options that should be defined in order to perform the enrichment analysis. The -o option defines the name of the output file that contains the results. The -i option defines the name of the file containing a list of gene/proteins (one gene/protein per line). It is mandatory to define the namespace (subontology) for which the enrichment analysis will be run. For example -ns BP means that only terms belonging to the biological process subontology will be taken into consideration. In order to specify the species, it is necessary to use the -s option. Basically, it is possible to run the GO enrichment analysis by typing the following:
 
 `java -jar Dingo.jar -o results -i list_of_genes -ns BP -s Homo_sapiens`
 
-If HPO term enrichment analysis is demanded then usage of option -e is required
+If HPO term enrichment analysis is needed then the usage of the option -e is required
 
 `java -jar DiNGO.jar -o results -i list_of_genes -ns O -s Homo_sapiens -e HPO`
 
 Note that in the above case using -s is optional.
-Under default settings DiNGO uses Hypergeometric test, but user may switch to Binomial test by using -st option. The following example uses Binomial test:
+
+Under the default settings DiNGO uses the Hypergeometric test, but the user may switch to the Binomial test by using the -st option. The following example uses the Binomial test:
 
 `java -jar Dingo.jar -o results -i list_of_genes -ns BP -s Homo_sapiens -st 2`
 
-If not specified DiNGO uses whole annotation as a reference set. This can be changed by passing name of the file containing reference set (-rs option). 
+If not specified DiNGO uses the whole annotation as a reference set. This can be changed by passing the name of the file containing the reference set (-rs option).
 
-User can specify ontology and annotation files by using -of and -af options, respectively. DiNGO supports OBO format for ontology and annotation files in GAF format. Additionally, DiNGO may use custom ontology and annotation files created by user. Under default DiNGO uses default ontology and annotation files. In the case, these files are not in annotations folder, DiNGO will try to download them first and then to do enrichment analysis.
+The user can specify the ontology and annotation files by using the -of and -af options, respectively. DiNGO supports the OBO format for ontology and annotation files in the GAF format. Additionally, DiNGO may use custom ontology and annotation files created by the user. By default, DiNGO uses the default ontology and annotation files. In case these files are not in the annotations folder, DiNGO will try to download them first and then to do the enrichment analysis.
 
-It is possible to exclude some annotation entries from the analysis by defining evidence codes that will not be taken into consideration. The following example does not use Electronic Annotation (IEA) and Traceable Author Statement (TAS) evidence codes:
+It is possible to exclude some annotation entries from the analysis by defining the evidence codes that will not be taken into consideration. The following example does not use the Electronic Annotation (IEA) and Traceable Author Statement (TAS) evidence codes:
 
 `java -jar Dingo.jar -o results -i list_of_genes.txt -ns BP -s human -dc IEA:TAS`
 
-Note that the codes are separated by colon. Detailed description of evidence codes can be found at [http://geneontology.org/docs/guide-go-evidence-codes/](http://geneontology.org/docs/guide-go-evidence-codes/). 
+Note that the codes are separated by a colon. A detailed description of the evidence codes can be found at [http://geneontology.org/docs/guide-go-evidence-codes/](http://geneontology.org/docs/guide-go-evidence-codes/). 
 
-Common issue while doing enrichment analysis is use of unsupported gene/protein identifications (IDs). DiNGO supports ID only if ID is contained in annotation file. To overcome this issue, user can specify TAB delimited file which contains in one column supported IDs and in other columns appropriate unsupported IDs (-m option). 
+A common issue while doing enrichment analysis is the use of unsupported gene/protein identifications (IDs). DiNGO supports an ID only if the ID is contained in the annotation file. To overcome this issue, the user can specify the TAB delimited file which contains in one column the supported IDs and in other columns appropriate unsupported IDs (-m option). 
 
 ### 4.3. Batch mode
 
-DiNGO batch mode works same as [BiNGO](https://www.psb.ugent.be/cbd/papers/BiNGO/User_Guide.html) batch mode. Firstly, clusters in the input file are separated by keyword batch. Secondly, when defining -o option it is necessary to use `batch`. The following example run DiNGO in batch mode:
+The DiNGO batch mode works the same as the [BiNGO](https://www.psb.ugent.be/cbd/papers/BiNGO/User_Guide.html) batch mode. Firstly, clusters in the input file are separated by the keyword batch. Secondly, when defining the -o option it is necessary to use a `batch`. Note that each cluster starts with a cluster name. The following example runs DiNGO in batch mode:
 
 `java -jar Dingo.jar -o batch -i input_file -ns BP -s human`
 
-It is important to say that DiNGO is multi-threaded application. So, when batch mode is used, it is possible to speed up processing time by defining number of threads. It can be done by using option -t.
+It is important to say that DiNGO is a multi-threaded application. So, when the batch mode is used, it is possible to speed up the processing time by defining the number of threads. It can be done by using option -t.
 
 `java -jar Dingo.jar -o batch -i input_file -ns BP -s human -t 4`
 
 ### 4.4. Supported species
 
-DiNGO supports GO enrichment analysis for 25 species. List of supported species can be find in configuration file (conf.properties). Note that some species have alias. For instance, GO enrichment analysis on a set of human gene/proteins could be invoked like following:
+DiNGO supports GO enrichment analysis for 25 species. The list of supported species can be found in the configuration file ([conf.properties](configuration/conf.properties)). Note that some species have an alias. For instance, GO enrichment analysis on a set of human gene/proteins could be invoked as follows:
 
 `java -jar Dingo.jar -o results -i list_of_genes.txt -ns MF -s Homo_sapiens`
 
@@ -93,61 +94,61 @@ or
 
 `java -jar Dingo.jar -o results -i list_of_genes.txt -ns MF -s human`
 
-Similarly, it is possible to use -s mouse instead of -s Mus_musculus or -s dog instead of -s Canis_domesticus.
+Similarly, it is possible to use the -s mouse instead of the -s Mus_musculus or -s dog instead of -s Canis_domesticus.
 
 ## 5. Modules
 
-DiNGO’s functionality is extended by three modules: update, mapping and propagation module. Each of them could be used as separate application.
+DiNGO’s functionality is extended by three modules: update, mapping and propagation module. Each of them could be used as a separate application.
 
 ### 5.1. Update module
 
-The update module performs download and processing of GO and HPO annotation resources upon user request. This functionality enables user to do enrichment analysis based on up-to-date ontology and annotation files. In addition, the module offers option for downloading UniProt (ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/) [2] and [HUGO Gene Nomenclature Committee (HGNC)](https://www.genenames.org/) [3] mapping files as well as SwissProt uniprot_sprot.dat file.
+The update module performs the download and processing of GO and HPO annotation resources upon user request. This functionality enables the user to do enrichment analysis based on up-to-date ontology and annotation files. In addition, the module offers an option for downloading UniProt [2] (ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/) and [HUGO Gene Nomenclature Committee (HGNC)](https://www.genenames.org/) [3] mapping files as well as the SwissProt uniprot_sprot.dat file.
 
 #### 5.1.1. GO files
 
-Module downloads GO OBO and annotation files in [GAF format](http://geneontology.org/docs/go-annotation-file-gaf-format-2.1/). In the case that GO files in DiNGO annotation folder have older date than downloaded ones they will be replaced.
+The module downloads GO OBO and annotation files in the [GAF format](http://geneontology.org/docs/go-annotation-file-gaf-format-2.1/). In case that the GO files in the DiNGO annotation folder have an older date than the downloaded ones they will be replaced.
 
 #### 5.1.2. HPO files
 
-The module downloads HPO OBO file and two annotation files: phenotype_annotation.tab and all_sources_all_frequencies_genes_to_phenotype.txt (https://hpo.jax.org/app/download/annotation). In order to be used by DiNGO the files have to be processed. HPO OBO file has no information about term namespace (subontology) that is used by DiNGO OBO file parser. Given that, after downloading HPO OBO file will be updated with namespace information for each term (see [Propagation module](#53-propagation-module-1)). On the other hand, information contained in the downloaded annotation files will be used for creation of DiNGO compatible file. The new annotation file contains gene and the associated HPO term in each line.
+The module downloads the HPO OBO file and two annotation files: phenotype_annotation.tab and all_sources_all_frequencies_genes_to_phenotype.txt (https://hpo.jax.org/app/download/annotation). In order to be used by DiNGO the files have to be processed. The HPO OBO file has no information about the term namespace (subontology) that is used by the DiNGO OBO file parser. Given that, after downloading the HPO OBO file will be updated with namespace information for each term (see [Propagation module](#53-propagation-module-1)).On the other hand, information contained in the downloaded annotation files will be used for creation of the DiNGO compatible file. The new annotation file contains the gene and the associated HPO term in each line.
 
 #### 5.1.3. Uniprot mapping files
 
-Module downloads UniProt mapping file which can be used by mapping module. Detailed explanation of the file structure can be found at the following link: ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/README. The file is downloaded into mapping folder. 
+The module downloads the UniProt mapping file which can be used by the mapping module. Detailed explanation of the file structure can be found at the following link ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/README. The file is downloaded into the mapping folder. 
 
 #### 5.1.4. SwissProt file
 
-Module downloads uniprot_sprot.dat file, containing annotated curated entries, which can be used by mapping module. The file has multi fasta format. 
+The module downloads the uniprot_sprot.dat file, containing the annotated curated entries, which can be used by the mapping module. The file has a multi FASTA format. 
 
 #### 5.1.5. HUGO file
 
-Update module uses HGNC REST web service to download all records with an approved symbol (https://www.genenames.org/help/rest/). The module downloads XML HUGO file and extracts information from it. As a result TAB delimited file is created which contains HGNC, Uniprot identifiers as well as gene symbols in each line. The file can be used by DiNGO.
+The update module uses an HGNC REST web service to download all records with an approved symbol (https://www.genenames.org/help/rest/). The module downloads the XML HUGO file and extracts information from it. As a result a TAB delimited file is created which contains HGNC, Uniprot identifiers as well as gene symbols in each line. The file can be used by DiNGO.
 
 #### 5.1.6. Usage
 
-The application has three options. The option -f defines file type that should be downloaded (GO, HPO, HUGO, UniProt, SwissProt) and this option is mandatory. The -sp option defines species (GO and UniProt files) or namespace (HPO file). If not specified it will be assumed that species is human (GO, UniProt) or that all HPO namespaces should be taken into consideration. The third option, -d, is used only with HPO and GO files. The option specifies which files will be updated: ontology file (-d 1), annotation file (-d 2) or both files (-d 3). The example bellow shows how to download and update GO ontology and annotation file:
+The application has three options. The option -f defines the file type that should be downloaded (GO, HPO, HUGO, UniProt, SwissProt) and this option is mandatory. The -sp option defines the species (GO and UniProt files) or namespace (HPO file). If not specified it will be assumed that the species is human (GO, UniProt) or that all HPO namespaces should be taken into consideration. The third option, -d, is used only with HPO and GO files. The option specifies which files will be updated: the ontology file (-d 1), annotation file (-d 2) or both files (-d 3). The example below shows how to download and update the GO ontology and annotation file:
 
 `java -cp Dingo.jar update.DiNGOFilesUpdater update -f GO -sp Mus_musculus -d 3`
 
 ### 5.2. Mapping module
 
-Mapping module converts one set of identifiers (IDs) to another one. The tool is inspired by [UniProt mapping tool](https://www.uniprot.org/uploadlists/). Mapping module relies on Uniprot idmapping.dat and SwiProt uniprot_sprot.fasta files (see [Update Module](#51-update-module-1) section). As an input the module accepts list of IDs (one ID per line). The output file contains input IDs in the first column and required IDs in the second one. Note that like UniProt mapping tool, the module requires that input IDs or output ones to be UniProt identifiers. In other words, it is possible to convert gene symbols to UniProt IDs, but it is not possible to convert gene symbols to Ensembl gene IDs. The module can be run as standalone application.
+The mapping module converts one set of identifiers (IDs) into another one. The tool is inspired by [UniProt mapping tool](https://www.uniprot.org/uploadlists/). The mapping module relies on Uniprot idmapping.dat and SwissProt uniprot_sprot.fasta files (see [Update Module](#51-update-module-1) section). As an input the module accepts the list of IDs (one ID per line). The output file contains input IDs in the first column and required IDs in the second one. Note that like the UniProt mapping tool, the module requires input IDs or output ones to be UniProt identifiers. In other words, it is possible to convert gene symbols to UniProt IDs, but it is not possible to convert gene symbols to Ensembl gene IDs. The module can be run as a standalone application.
 
 #### 5.2.1. Usage
 
-The following example will convert gene symbols identifiers to uniprot ones taking into consideration only manually curated entries:
+The following example will convert gene symbols identifiers into UniProt ones taking into consideration only manually curated entries:
 
 `java -cp DiNGO.jar uniprot.UniprotMappingParser -i input_file -t UniProtKB -f Gene_Name -m HUMAN_9606_idmapping.dat -s uniprot_sprot.fasta`
 
-As result file mapping.tab will be created. The file contains two columns separated by TAB. The first column contains gene symbol IDs and the second contains uniprot IDs.
+As a result a file mapping.tab will be created. The file contains two columns separated by TAB. The first column contains gene symbol IDs and the second contains UniProt IDs.
 
-The help is invoked in the following way:
+Help is invoked in the following way:
 
 `java -cp DiNGO.jar uniprot.UniprotMappingParser`
 
 ### 5.3. Propagation module
 
-Propagation module function is to add namespace information to each term in HPO OBO file. It can be invoke in the following way:
+The propagation module’s function is to add namespace information to each term in the HPO OBO file. It can be invoked in the following way:
 
 `java -cp Dingo.jar propagation.Propagation -i <input HPO obo file> -o <output OBO file>`
 
@@ -156,59 +157,59 @@ Setting up DiNGO for enrichment analysis is straightforward. The following examp
 
 ### 6.1. Enrichment analysis with default ontology and annotation files
 
-The following example demonstrates how to do enrichment analysis of HPO terms on the gene set contained in [cosmic_list.txt](datasets/cosmic_list.txt). The file contains 723 genes represented by its gene symbols.
-In order to do enrichment analysis the user has to specify input file (cosmic_list.txt), output file which will contain results of the analysis, ontology (HPO) and namespace (subontology, in this case phenotypic abnormality). Taking into consideration all of the aforementioned, DiNGO is invoked in the following manner:
+The following example demonstrates how to do enrichment analysis of HPO terms on the gene set contained in [cosmic_list.txt](datasets/cosmic_list.txt). The file contains 723 genes represented by their gene symbols.
+In order to do enrichment analysis the user has to specify the input file (cosmic_list.txt), the output file which will contain results of the analysis, ontology (HPO) and namespace (subontology, in this case phenotypic abnormality). Taking into consideration all of the aforementioned, DiNGO is invoked in the following manner:
 
 `java -jar Dingo.jar -i cosmic_list.txt -o results -e HPO -ns O`
 
-Given that ontology and annotation files are not specified, the application will try to use default ones located in annotations folder. In the case that the files do not exists, DiNGO will run update module in order to download appropriate files.
+Given that the ontology and annotation files are not specified, the application will try to use the default ones located in the annotations folder. In case that the files do not exist, DiNGO will run an update module in order to download the appropriate files.
 
 ![first_run_update](img/first_run_update.png)
 
-After successful download, DiNGO will proceed with enrichment analysis. The results will be stored in the output file named results.bgo. Note that cosmic_list.txt is located in the same folder as Dingo jar file is.
+After a successful download, DiNGO will proceed with the enrichment analysis. The results will be stored in the output file named results.bgo. Note that cosmic_list.txt is located in the same folder as the Dingo jar file.
 
 ![first_run_done](img/first_run_done.png)
 
-The output file contains header with info about running parameters and table with results (see picture below).
+The output file contains a header with info about the running parameters and table with results (see picture below).
 
 ![Dingo_output](img/Dingo_output.png)
 
-In the above case the application will use default p value (0.05), hypergeometric test and Benjamini & Hochberg False Discovery Rate (FDR) correction. It is very easy to change these parameters:
+In the above case the application will use the default p value (0.05), hypergeometric test and Benjamini & Hochberg False Discovery Rate (FDR) correction. It is very easy to change these parameters:
 
 `java -jar Dingo.jar -i cosmic_list.txt -o results -e HPO -ns O -p 0.01 -st 2 -ct 2`
 
-In the above example p value is set to 0.01, DiNGO uses Binomial test (-st flag) and Bonferroni Family-Wise Error Rate (FWER) correction (-ct flag). It is possible to make DiNGO not to calculate adjusted p values (-ct 3).
+In the above example the p value is set to 0.01, DiNGO uses the Binomial test (-st flag) and Bonferroni Family-Wise Error Rate (FWER) correction (-ct flag). It is possible to make DiNGO not calculate the adjusted p values (-ct 3).
 
 ### 6.2 Enrichment analysis with user defined ontology and annotation files
 
-DiNGO allows usage of user defined ontology and annotation files.  For example, if user wants to use OBO file other than default one, it is necessary to  pass full file name to DiNGO:
+DiNGO allows the usage of user defined ontology and annotation files. For example, if the user wants to use the OBO file other than the default one, it is necessary to pass the full file name onto DiNGO:
 
 `java -jar Dingo.jar -i cosmic_list.txt -o results -e HPO -ns O -of /path/to/file/go.obo`
 
-In the case of non-default annotation file:
+In the case of a non-default annotation file:
 
 `java -jar Dingo.jar -i cosmic_list.txt -o results -e HPO -ns O -af /path/to/file/gene_association.gaf`
 
 ### 6.3 Use of mapping files
 
-DiNGO supports only gene/protein IDs if they are included in the annotation file. For example, GAF files contain UniProtKB and gene symbol IDs. If user wants to do GO term enrichment analysis on the gene list contained in the file [entrez_list.txt](datasets/entrez_list.txt), which contains Entrez IDs, the program won’t be able to do enrichment analysis due to unsupported IDs in the input file:
+DiNGO supports only gene/protein IDs if they are included in the annotation file. For example, GAF files contain UniProtKB and gene symbol IDs. If the user wants to do GO term enrichment analysis on the gene list contained in the file [entrez_list.txt](datasets/entrez_list.txt), which contains Entrez IDs, the program won’t be able to do enrichment analysis due to unsupported IDs in the input file:
 
 ![unsupprotedIDs](img/unsupportedIDs.png)
 
-This issue can be solved by passing a mapping file as an argument to DiNGO. Mapping file is TAB delimited file which contains in one column supported IDs and in other column(s) appropriate unsupported IDs. There are several ways to create mapping file. DiNGO offers two possibilities. The first one is usage of Mapping module (see [Mapping module](#52-mapping-module-1)) and the second one is usage of HUGO mapping file (see [HUGO file](#515-hugo-file-1) section). In addition, user is free to employ any other mapping tool to create mapping file. 
+This issue can be solved by passing a mapping file as an argument to DiNGO. The mapping file is a TAB delimited file which contains in one column supported IDs and in the other column(s) appropriate unsupported IDs. There are several ways to create a mapping file. DiNGO offers two possibilities. The first one is the usage of the Mapping module (see [Mapping module](#52-mapping-module-1)) and the second one is the usage of the HUGO mapping file (see [HUGO file](#515-hugo-file-1) section). In addition, the user is free to employ any other mapping tool to create a mapping file. 
 
-Based on above, before we run DiNGO we have to map Entrez IDs to either UniProtKB or gene symbol IDs. Using DiNGO mapping tool to convert Entrez IDs to Uniprot IDs is as following:
+Based on the above, before we run DiNGO we have to map Entrez IDs to either UniProtKB or gene symbol IDs. Using the DiNGO mapping tool to convert Entrez IDs to UniProt IDs is as follows: 
 
 ![mapping_tools](img/mapping_tools.png)
 
-Mapping tool will create mapping.tab file in the folder where DiNGO jar file is located. Also, the program reports if there are some not mapped entries.
-Now user can run DiNGO in the following way:
+The mapping tool will create a mapping.tab file in the folder where the DiNGO jar file is located. Also, the program reports if there are some entries that have not been mapped.
+
+Now the user can run DiNGO in the following way:
 
 ![mapping_file](img/mapping_file.png)
 
 ## 7. Dependencies
 
-Before building DiNGO from source the following dependencies must be satisfied:
 - [colt.jar](https://dst.lbl.gov/ACSSoftware/colt)
 - [commons-net-3.6.jar](https://commons.apache.org/proper/commons-net/index.html)
 - [jdom-2.0.6.jar](http://www.jdom.org/downloads/)
