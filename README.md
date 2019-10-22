@@ -110,7 +110,7 @@ The module downloads GO OBO and annotation files in the [GAF format](http://gene
 
 #### 5.1.2. HPO files
 
-The module downloads the HPO OBO file and two annotation files: phenotype_annotation.tab and all_sources_all_frequencies_genes_to_phenotype.txt (https://hpo.jax.org/app/download/annotation). In order to be used by DiNGO the files have to be processed. The HPO OBO file has no information about the term namespace (subontology) that is used by the DiNGO OBO file parser. Given that, after downloading the HPO OBO file will be updated with namespace information for each term (see [Propagation module](#53-propagation-module-1)).On the other hand, information contained in the downloaded annotation files will be used for creation of the DiNGO compatible file. The new annotation file contains the gene and the associated HPO term in each line.
+The module downloads the HPO OBO file and two annotation files: phenotype_annotation.tab and all_sources_all_frequencies_genes_to_phenotype.txt (https://hpo.jax.org/app/download/annotation). In order to be used by DiNGO the files have to be processed. The HPO OBO file has no information about the term namespace (subontology) that is used by the DiNGO OBO file parser. Given that, after downloading the HPO OBO file will be updated with namespace information for each term (see [the Propagation module](#53-propagation-module-1)).On the other hand, information contained in the downloaded annotation files will be used for creation of the DiNGO compatible file. The new annotation file contains the gene and the associated HPO term in each line.
 
 #### 5.1.3. Uniprot mapping files
 
@@ -132,7 +132,7 @@ The application has three options. The option -f defines the file type that shou
 
 ### 5.2. Mapping module
 
-The mapping module converts one set of identifiers (IDs) into another one. The tool is inspired by [UniProt mapping tool](https://www.uniprot.org/uploadlists/). The mapping module relies on Uniprot idmapping.dat and SwissProt uniprot_sprot.fasta files (see [Update Module](#51-update-module-1) section). As an input the module accepts the list of IDs (one ID per line). The output file contains input IDs in the first column and required IDs in the second one. Note that like the UniProt mapping tool, the module requires input IDs or output ones to be UniProt identifiers. In other words, it is possible to convert gene symbols to UniProt IDs, but it is not possible to convert gene symbols to Ensembl gene IDs. The module can be run as a standalone application.
+The mapping module converts one set of identifiers (IDs) into another one. The tool is inspired by [UniProt mapping tool](https://www.uniprot.org/uploadlists/). The mapping module relies on Uniprot idmapping.dat and SwissProt uniprot_sprot.fasta files (see [the Update Module](#51-update-module-1) section). As an input the module accepts the list of IDs (one ID per line). The output file contains input IDs in the first column and required IDs in the second one. Note that like the UniProt mapping tool, the module requires input IDs or output ones to be UniProt identifiers. In other words, it is possible to convert gene symbols to UniProt IDs, but it is not possible to convert gene symbols to Ensembl gene IDs. The module can be run as a standalone application.
 
 #### 5.2.1. Usage
 
@@ -196,7 +196,7 @@ DiNGO supports only gene/protein IDs if they are included in the annotation file
 
 ![unsupprotedIDs](img/unsupportedIDs.png)
 
-This issue can be solved by passing a mapping file as an argument to DiNGO. The mapping file is a TAB delimited file which contains in one column supported IDs and in the other column(s) appropriate unsupported IDs. There are several ways to create a mapping file. DiNGO offers two possibilities. The first one is the usage of the Mapping module (see [Mapping module](#52-mapping-module-1)) and the second one is the usage of the HUGO mapping file (see [HUGO file](#515-hugo-file-1) section). In addition, the user is free to employ any other mapping tool to create a mapping file. 
+This issue can be solved by passing a mapping file as an argument to DiNGO. The mapping file is a TAB delimited file which contains in one column supported IDs and in the other column(s) appropriate unsupported IDs. There are several ways to create a mapping file. DiNGO offers two possibilities. The first one is the usage of the Mapping module (see [the Mapping module](#52-mapping-module-1)) and the second one is the usage of the HUGO mapping file (see [the HUGO file](#515-hugo-file-1) section). In addition, the user is free to employ any other mapping tool to create a mapping file. 
 
 Based on the above, before we run DiNGO we have to map Entrez IDs to either UniProtKB or gene symbol IDs. Using the DiNGO mapping tool to convert Entrez IDs to UniProt IDs is as follows: 
 
