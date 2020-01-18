@@ -145,7 +145,7 @@ public class UniProtFileDownloader implements IFileDownload {
             }
 
             output.close();
-            //annotation file is gzipped
+            //if file is gzipped
             if (fileName.endsWith(".gz")) {
                 unzipGoAnnotation(downloadedFile, downloadedFile.substring(0, downloadedFile.lastIndexOf(".")));
             }
