@@ -11,7 +11,6 @@ import java.util.Objects;
 
 /**
  *<p>Class that represents ontology Term
- * Note that class does not know anything about xref and synonyms.
  * </p>
  * @author Radoslav Davidović
  */
