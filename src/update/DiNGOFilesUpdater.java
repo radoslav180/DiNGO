@@ -8,6 +8,8 @@ package update;
 import configurator.Configurator;
 import hugo.HUGOFlatFileCreator;
 import hugo.HUGOXmlDownloader;
+import propagation.OboParser;
+import propagation.Propagation;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -102,17 +103,12 @@ public final class DiNGOFilesUpdater {
             Logger.getLogger(DiNGOFilesUpdater.class.getName()).log(Level.WARNING, null, ex);
             return false;
         }
+        OboParser oboParser = new OboParser(oboFile);
         System.out.println("Reading " + oboFile);
-        propagation.Propagation propagation = new propagation.Propagation(oboFile);
+        Propagation propagation = new propagation.Propagation(oboParser);
 
-        System.out.println("Reading done!\nFound " + propagation.getLeafTerms().size() + " leaf terms");
+        System.out.println("Reading done!\nFound " + oboParser.getLeafTerms().size() + " leaf terms");
         System.out.println("Propagating leaf terms...");
-
-        propagation.propagateAndMapLeafTerms();
-        Map<String, String> termToNamespace = propagation.getTermToNamespace();
-
-        System.out.println("Mapped " + termToNamespace.size() + " terms to namespace");
-        //System.out.println("Adding namespace info to OBO file...");
 
         return propagation.addNamespaceInfoToOboFile(configurator.getDownloadFolder()
                 + configurator.getHpoOntologyFileName());
@@ -123,33 +119,34 @@ public final class DiNGOFilesUpdater {
      * Updates selected GO file</p>
      *
      * @param fileName name of downloaded file
-     * @param relativePathToGOFile relative path to file on server
      */
-    private void updateGOFile(String fileName, String relativePathToGOFile) {
+    private void updateGOFile(String fileName) {
         //String subFolder = configurator.getPathToOboFile();
         String dingoFilesFolder = configurator.getDirFiles();//folder with annotation resources
         String downloadFolder = configurator.getDownloadFolder();//DiNGO download folder
         String link = configurator.getGoConsortiumAddress();//get link
+        String serverFolder;//folder where resource is located
 
+        serverFolder = fileName.endsWith(".obo") ? configurator.getPathToOboFile() : configurator.getPathToAnnotationFile();
+
+        String fileAddress = link + serverFolder + fileName;
         System.out.println("Downloading " + fileName + " from " + link);
-        FtpConnection connection = FtpConnection.getInstance(link, configurator.
-            getUserName(), configurator.getPassword(), configurator.getPort());
-        
-        fileDownloader = new GOFileDownloader(connection, link, relativePathToGOFile, downloadFolder);
+        fileDownloader = new GOFileDownloader(fileAddress, downloadFolder);
 
-        ProgressBar pBar = new ProgressBar();
-        pBar.start();
-
-        fileDownloader.downloadFile(fileName);
-        pBar.setShowProgressBar(false);
-        //if file is gzipped remove gz extensuion from file name
+        //if file is gzipped remove gz extension from file name
         if (fileName.endsWith(".gz")) {
 
             fileName = fileName.substring(0, fileName.lastIndexOf("."));
 
         }
 
-        Date lastModDate = LocalFilesManager.extractOboReleaseDate(downloadFolder + fileName);//fileDownloader.getReleaseDate();
+        ProgressBar pBar = new ProgressBar();
+        pBar.start();
+
+        fileDownloader.downloadFile(fileName);
+        pBar.setShowProgressBar(false);
+
+        Date lastModDate = fileDownloader.getReleaseDate();//LocalFilesManager.extractOboReleaseDate(downloadFolder + fileName);
         Date currentFileDate = LocalFilesManager.extractOboReleaseDate(dingoFilesFolder + fileName);
 
         System.out.println("Releasing date of current file located at " + dingoFilesFolder + ": " + currentFileDate);
@@ -178,7 +175,7 @@ public final class DiNGOFilesUpdater {
      * Updates GO ontology file</p>
      */
     private void updateGOOboFile() {
-        updateGOFile("go.obo", configurator.getPathToOboFile());
+        updateGOFile(configurator.getGoOntologyFileName());
     }
 
     /**
@@ -194,7 +191,7 @@ public final class DiNGOFilesUpdater {
             isFileExists = false;
         }
         if(isFileExists){
-            updateGOFile(annotationFileName, configurator.getPathToAnnotationFile());
+            updateGOFile(annotationFileName);
         }
             
     }
@@ -202,10 +199,11 @@ public final class DiNGOFilesUpdater {
     private void updateUniProtMappingFile() {
         String uniProtFtpAddress = configurator.getUniProtFtpAddress();
         String pathToUniProtFiles = configurator.getUniProtByOrganismFolder();
-        //System.out.println(pathToUniProtFiles);
         String downloadFolder = configurator.getMappingFolder();
         String mappingFileName = configurator.getUniProtMappingFileName();
+
         boolean isFileExist = true;
+
         if (mappingFileName == null) {
             System.out.println("Can't find idmapping.dat file for species "
                     + speciesName);
@@ -215,7 +213,7 @@ public final class DiNGOFilesUpdater {
             FtpConnection connection = FtpConnection.getInstance(uniProtFtpAddress, 
                     configurator.getUserName(), configurator.getPassword(), 
                     configurator.getPort());
-            fileDownloader = new GOFileDownloader(connection, uniProtFtpAddress,
+            fileDownloader = new UniProtFileDownloader(connection, uniProtFtpAddress,
                     pathToUniProtFiles, downloadFolder);
             ProgressBar pBar = new ProgressBar();
             pBar.start();
@@ -234,7 +232,7 @@ public final class DiNGOFilesUpdater {
         FtpConnection connection = FtpConnection.getInstance(uniProtFtpAddress, 
                     configurator.getUserName(), configurator.getPassword(), 
                     configurator.getPort());
-        fileDownloader = new GOFileDownloader(connection, uniProtFtpAddress,
+        fileDownloader = new UniProtFileDownloader(connection, uniProtFtpAddress,
                 pathToUniProtFiles, downloadFolder);
         ProgressBar pBar = new ProgressBar();
         pBar.start();
