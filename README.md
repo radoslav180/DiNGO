@@ -1,32 +1,32 @@
 # DiNGO Manual
 
 ## Table of Contents
-## 1. Introduction
-## 2. Installation
-## 3. Requirements
-## 4. Usage
-   - ## 4.1. First run
-   - ## 4.2. Command line options
-   - ## 4.3. Batch mode
-   - ## 4.4. Supported species
-## 5. Modules
-   - ## 5.1. Update module
-        - ## 5.1.1. GO files
-        - ## 5.1.2. HPO files
-        - ## 5.1.3. Uniprot mapping files
-        - ## 5.1.4. SwissProt file
-        - ## 5.1.5. HUGO file
-        - ## 5.1.6. Usage
-   - ## 5.2. Mapping module
-        - ## 5.2.1. Usage
-   - ## 5.3. Propagation module
-## 6. Usage examples
-   - ## 6.1 Enrichment analysis with default ontology and annotation files
-   - ## 6.2 Enrichment analysis with user defined ontology and annotation files
-   - ## 6.3 Use of mapping files
-## 7. Dependencies
-## 8. News
-## 9. References
+## [1. Introduction](#1-introduction-1)
+## [2. Installation](#2-installation-1)
+## [3. Requirements](#3-requirements-1)
+## [4. Usage](#4-usage-1)
+   - ## [4.1. First run](#41-first-run-1)
+   - ## [4.2. Command line options](#42-command-line-options-1)
+   - ## [4.3. Batch mode](#43-batch-mode-1)
+   - ## [4.4. Supported species](#44-supported-species-1)
+## [5. Modules](#5-modules-1)
+   - ## [5.1. Update module](#51-update-module-1)
+        - ## [5.1.1. GO files](#511-go-files-1)
+        - ## [5.1.2. HPO files](#512-hpo-files-1)
+        - ## [5.1.3. Uniprot mapping files](#513-uniprot-mapping-files-1)
+        - ## [5.1.4. SwissProt file](#514-swissprot-file-1)
+        - ## [5.1.5. HUGO file](#515-hugo-file-1)
+        - ## [5.1.6. Usage](#516-usage-1)
+   - ## [5.2. Mapping module](#52-mapping-module-1)
+        - ## [5.2.1. Usage](#521-usage-1)
+   - ## [5.3. Propagation module](#53-propagation-module-1)
+## [6. Usage examples](#6-usage-examples-1)
+   - ## [6.1 Enrichment analysis with default ontology and annotation files](#61-enrichment-analysis-with-default-ontology-and-annotation-files-1)
+   - ## [6.2 Enrichment analysis with user defined ontology and annotation files](#62-enrichment-analysis-with-user-defined-ontology-and-annotation-files-1)
+   - ## [6.3 Use of mapping files](#63-use-of-mapping-files-1)
+## [7. Dependencies](#7-dependencies-1)
+## [8. News](#8-news-1)
+## [9. References](#9-references-1)
 
 ## 1. Introduction
 DiNGO is a standalone application based on an open source code from BiNGO [1], a Java based tool aimed at determining which Gene Ontology (GO) categories are overrepresented in a set of genes. DiNGO is a command line application which is able to perform GO and HPO term enrichment on a set of genes or proteins. Also, there are additional modules that bring new functionalities to DiNGO.
