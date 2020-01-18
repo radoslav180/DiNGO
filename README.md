@@ -25,7 +25,8 @@
    - ## 6.2 Enrichment analysis with user defined ontology and annotation files
    - ## 6.3 Use of mapping files
 ## 7. Dependencies
-## 8. References
+## 8. News
+## 9. References
 
 ## 1. Introduction
 DiNGO is a standalone application based on an open source code from BiNGO [1], a Java based tool aimed at determining which Gene Ontology (GO) categories are overrepresented in a set of genes. DiNGO is a command line application which is able to perform GO and HPO term enrichment on a set of genes or proteins. Also, there are additional modules that bring new functionalities to DiNGO.
@@ -86,7 +87,7 @@ It is important to say that DiNGO is a multi-threaded application. So, when the 
 
 ### 4.4. Supported species
 
-DiNGO supports GO enrichment analysis for 25 species. The list of supported species can be found in the configuration file ([conf.properties](configuration/conf.properties)). Note that some species have an alias. For instance, GO enrichment analysis on a set of human gene/proteins could be invoked as follows:
+DiNGO supports GO enrichment analysis for 22 species. The list of supported species can be found in the configuration file ([conf.properties](configuration/conf.properties)). Note that some species have an alias. For instance, GO enrichment analysis on a set of human gene/proteins could be invoked as follows:
 
 `java -jar Dingo.jar -o results -i list_of_genes.txt -ns MF -s Homo_sapiens`
 
@@ -214,7 +215,16 @@ Now the user can run DiNGO in the following way:
 - [commons-net-3.6.jar](https://commons.apache.org/proper/commons-net/index.html)
 - [jdom-2.0.6.jar](http://www.jdom.org/downloads/)
 
-## 8. References
+## 8. News
+There are a few significant changes in the new version:
+- Given that repository at ftp.geneontology.org has not been updated for a while, DiNGO now downloads GO files from  the following [repository](http://current.geneontology.org/). As a consequence class [GOFileDownloader](src/update/GOFileDownloader.java) has been subject to numerous changes. Also, there is a new class [UniProtFileDownloader](src/update/UniProtFileDownloader.java).
+- Support for the following species has been dropped: Agrobacterium tumefaciens, Dickeya dadantii, Magnaporthe grisea and Oomycetes. Pseudomonas aeruginosa has been added to the list of supported species.
+- [HPO](https://hpo.jax.org/app/) has added two new subontologies: [Blood group](https://hpo.jax.org/app/browse/term/HP:0032223) and [Past medical history](https://hpo.jax.org/app/browse/term/HP:0032443). This change made [the Propagation module](#53-propagation-module-1) obsolete. Thus, the module is completely re-written to keep up with the changes.
+- [DiNGO.jar](https://www.vin.bg.ac.rs/180/tools/DiNGO.php) file is going to be updated very soon.
+
+DiNGO team, 18.01.2020.
+
+## 9. References
 
 [1]	Maere S, Heymans K, Kuiper M. BiNGO: a Cytoscape plugin to assess overrepresentation of gene ontology categories in biological networks. Bioinforma Oxf Engl 2005;21:3448–9. doi:10.1093/bioinformatics/bti551.
 
