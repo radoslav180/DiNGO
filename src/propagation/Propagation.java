@@ -1,8 +1,5 @@
 /*
- * Copyright (c) 2019. Institute of Nuclear Sciences Vinča
- *
- * Author: Radoslav Davidović 
- *
+ * Copyright (c) 2019.
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -25,276 +22,121 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-
 /**
  * <p>Class that contains methods responsible for the propagation of ontology terms (HPO terms)</p>
  * @author Radoslav Davidović
  */
 public class Propagation {
-    /**
-     * <p>Ontology file in OBO format</p>
-     */
-    private String ontologyFile;
-    /**
-     * <p>Reference to the root term which is the last in the process of term propagation</p>
-     */
-    private String marker;
+    //namespace or subontology
+    private String namespace = "";
+    //map that contains term as key and its parents as value
+    private final Map<Term, List<Term>> termToParents;
+    private final OboParser oboParser;
 
-    //private static final String[] ROOTS = {"0008150", "0003674", "0005575"};//ontologies roots IDs
-    /**
-     * <p>Array containing HPO root terms</p>
-     */
-    private static final String[] HPROOTS = {"0000118", "0000005", "0012823", "0001461",
-            "0000001", "0040279", "0031797"};// HPO ontologies roots "0040006"
-    /**
-     * <p>Map that contains term ID as key and parents of that terms as value</p>
-     */
-    private Map<String, Set<String>> synonymsMap;
-    /**
-     * <p>Maps each term to appropriate namespace</p>
-     */
-    private Map<String, String> termToNamespace;
-    /**
-     * <p>Leaf terms</p>
-     */
-    private Set<String> leafTerms;
-    
-    /**
-     * <p>Constructor</p>
-     * @param ontologyFile name of ontology file in OBO format
-     */
-    public Propagation(String ontologyFile) {
-        this.ontologyFile = ontologyFile;
-        init();
-    }
-    
-    //initialize variables
-    private void init() {
+    public Propagation(OboParser oboParser) {
 
-        termToNamespace = new HashMap<>();
-        leafTerms = new HashSet<>();
-        synonymsMap = new HashMap<>();
-        termToNamespace.put("0000118", "phenotypic_abnormality");
-        termToNamespace.put("0000005", "mode_of_inheritance");
-        termToNamespace.put("0040279", "frequency");
-        termToNamespace.put("0012823", "clinical_modifier");
-        termToNamespace.put("0031797", "clinical_course");
-        termToNamespace.put("0000001", "All");
-        buildSynonymsMap();
+        termToParents = new HashMap<>();
+        this.oboParser = oboParser;
     }
 
-    //check if term is an ontology root
-    private boolean isTermRoot(String GOTerm) {
-        for (String id : HPROOTS) {
-            if (GOTerm.equals(id)) {
-                return true;
+    private void initTemToParentsMap() {
+        List<Term> terms = oboParser.getAllTerms();
 
-            }
-        }
-
-        return false;
-    }
-    //returns root term id if in set, otherwise returns empty string
-    private String whatRootInside(Set<String> set) {
-        Iterator<String> it = set.iterator();
-        String test;
-        while (it.hasNext()) {
-            test = it.next();
-            for (String id : HPROOTS) {
-                if (test.equals(id)) {
-                    return id;
-                }
-            }
-        }
-
-        return "";
-    }
-
-    //check if Set contains any of the ontology roots
-    private boolean isItRootInside(Set<String> set) {
-        Iterator<String> it = set.iterator();
-        String test;
-        while (it.hasNext()) {
-            test = it.next();
-            for (String id : HPROOTS) {
-                if (test.equals(id)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    //build map from obo file. Key is HPO term id, value is Set containing HPO terms with is_a relations to the key value
-    private void buildSynonymsMap() {
-        BufferedReader reader;
-        try {
-            reader = new BufferedReader(new FileReader(ontologyFile));
-            String line;
-            String key = "";
-            String value;
-            boolean isInTermField = false;
-            Set<String> obsoleteSet = new HashSet<>();
-            Set<String> nonLeafTerms = new HashSet<>();
-            Set<String> synonymsSet = new HashSet<>();
-
-            while ((line = reader.readLine()) != null) {
-                if (line.contains("[Term]")) {
-                    isInTermField = true;
-                }
-                if (line.contains("[Typedef]")) {
-                    break;
-                }
-                if (isInTermField) {
-                    if (line.startsWith("id: HP")) {
-                        key = line.split(":")[2];
-
-                    }
-                    if (line.startsWith("is_a:")) {
-                        value = line.substring(9, 16);
-                        synonymsSet.add(value);
-                    }
-                    if (line.startsWith("is_obsolete:")) {
-                        obsoleteSet.add(key);
-                    }
-                    if (line.contains("[Term]")) {
-                        if (!synonymsSet.isEmpty()) //leafs.add(key);
-                        {
-                            synonymsMap.put(key, new HashSet<>(synonymsSet));
-                        } else {
-
-                            synonymsMap.put(key, null);
-                        }
-                        //System.out.println("Map size " + synonymsMap.size());
-                        nonLeafTerms.addAll(synonymsSet);
-                        synonymsSet.clear();
-
-                    }
-                    //for last Term
-                    if(!synonymsSet.isEmpty() && synonymsMap.get(key) == null){
-                        synonymsMap.put(key, synonymsSet);
-                    }
-                    if (!synonymsMap.containsKey(key)) {
-
-                        synonymsMap.put(key, null);
-                    }
-
-                }
-
-            }
-            //remove obsolete terms from the map
-            for (String s : obsoleteSet) {
-                if (synonymsMap.containsKey(s)) synonymsMap.remove(s);
-            }
-            //collect all leaf terms
-            for (Map.Entry<String, Set<String>> en : synonymsMap.entrySet()) {
-                if (!nonLeafTerms.contains(en.getKey())) {
-                    leafTerms.add(en.getKey());
-                }
+        for (Term t : terms) {
+            try {
+                List<Term> temp1 = t.getParentTerms();
+                termToParents.put(t, temp1);
+            } catch (NullPointerException ex) {
+                System.out.println(ex.getMessage());
 
             }
 
-        } catch (IOException msg) {
-            System.out.println(msg.getMessage());
         }
     }
-    
     /**
-     * <p>Propagate and map to namespace all leaf terms of the given ontology.</p>
-     * @return List of all propagated terms
+     * <p>Method finds path from specified term to root term</p>
+     * @param term 
+     * @return list of terms that represents path from term to the root
      */
-    public List<String> propagateAndMapLeafTerms() {
-        Set<String> allTerms = new HashSet<>();
-        for (String l : leafTerms) {
-
-            if (l.length() > 0) {
-                try{
-                    Set<String> props = new HashSet<>(Arrays.asList(propagateTerm(l)));
-                    allTerms.addAll(props);
-                    String namespace = termToNamespace.get(marker);
-                    for (String p : props) {
-                        termToNamespace.put(p, namespace);
-                    }
-                    termToNamespace.put(l, namespace);
-                } catch(NullPointerException ex){
-                    System.out.println(l + " " + ex.getCause());
-                }
-
-            }
+    public List<Term> propagateTerm(Term term) {
+        if (termToParents.isEmpty()) {
+            initTemToParentsMap();
         }
 
-        return new ArrayList<>(allTerms);
-    }
-
-    /**
-     * <p>Performs propagation of ontology term up to the root</p>
-     * @param HPOTerm starting term for propagation
-     * @return Array containing all propagated terms
-     */
-    public String[] propagateTerm(String HPOTerm) {
-
-        Set<String> terms = new HashSet<>();//set that is going to contain propagated terms
-        boolean isItStartTerm = true;
-        if (!synonymsMap.containsKey(HPOTerm)) {
-            //System.out.println("Key " + HPOTerm + " is not found!");
-            return new String[]{};
-        }
-        Set<String> values;
-        Set<String> newValues = new HashSet<>();
+        Set<Term> props = new HashSet<>();//contains propagated terms
+        List<Term> terms = new ArrayList<>();//contains parents of a term
+        List<Term> tempList = new ArrayList<>();
+        terms.add(term);
 
         while (true) {
-            if (isItStartTerm) {
-                values = synonymsMap.get(HPOTerm);
-                terms.addAll(values);
-                if (isItRootInside(values)) {
-                    marker = whatRootInside(values);
-                    break;
-                }
-                //System.out.println(values);
-                isItStartTerm = false;
-            } else {
-                values = new HashSet<>(newValues);
-                newValues.clear();
-            }
-            Iterator<String> it = values.iterator();
-            while (it.hasNext()) {
-
-                Set<String> temp = synonymsMap.get(it.next());
-                if (temp != null) {
-                    terms.addAll(temp);
-                    newValues.addAll(temp);
-                }
-
-            }
-
-            if (isItRootInside(newValues)) {
-                marker = whatRootInside(newValues);
+            //if term does not have parents, that means we reached root term
+            if (terms.isEmpty()) {
                 break;
             }
+            for (Term t : terms) {
+                if (termToParents.containsKey(t)) {
+
+                    if (termToParents.get(t).isEmpty()) {
+                        break;
+                    }
+                    //test if term is subontology root term
+                    if(termToParents.get(t).size() == 1 && termToParents.get((termToParents.get(t).get(0))).isEmpty()){
+                        //System.out.println("Namespace: " + t.getName());
+                        namespace = t.getName().toLowerCase().replace(" ", "_");
+                    }
+                    tempList.addAll(termToParents.get(t));
+                    props.add(t);
+                } else {
+                    System.out.println("Term " + t.getId() + " not found!");
+                    return terms;
+                }
+            }
+            terms = new ArrayList<>(tempList);
+            tempList.clear();
         }
-
-        String[] propagatedTerms = terms.toArray(new String[terms.size()]);
-
-        return propagatedTerms;
+        return new ArrayList<>(props);
     }
+    
+    //associates each term to appropriate namespace
+    private Map<Term, String> mapTermToNamespace() {
+        Map<Term, String> namespaces = new HashMap<>();
+        List<Term> leafTerms = oboParser.getLeafTerms();
+        List<Term> props;
+        for (Term t : leafTerms) {
+            props = propagateTerm(t);
+            
+            if (props.size() > 1) {
+                for (Term p : props) { 
+                    namespaces.put(p, namespace);
+                }
+               
+            }
+
+        }
+        return namespaces;
+    }
+    
     /**
-     * <p>Adds line containing namespace to each term in OBO file</p>
+     * <p>Adds line containing namespace to each term in OBO file. Returns true if
+     * operation was successful
+     * </p>
      * @param oboFile name of OBO file
-     * @return 
+     * @return returns true if operation succeeds otherwise false
      */
     public boolean addNamespaceInfoToOboFile(String oboFile){
-        System.out.println("Adding namespace info to OBO file......");
-        try (BufferedReader reader = new BufferedReader(new FileReader(this.ontologyFile));
+        String oldObo = oboParser.getFileName();
+        System.out.println("Adding namespace info to OBO file...");
+        try (BufferedReader reader = new BufferedReader(new FileReader(oldObo));
                 BufferedWriter writer = new BufferedWriter(new FileWriter(oboFile))) {
             String line;
-            propagateAndMapLeafTerms();
+            Map<Term, String> termToNamespace = mapTermToNamespace();
+
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("id: HP")) {
                     writer.write(line);
                     writer.newLine();
-                    if (termToNamespace.containsKey(line.split(":")[2])) {
-                        writer.write("namespace: " + termToNamespace.get(line.split(":")[2]));
+                    if (termToNamespace.containsKey(new Term(line.split(":")[2], ""))) {
+                        writer.write("namespace: " + termToNamespace.get(new Term(line.split(":")[2], "")));
                         writer.newLine();
                     }
                 } else {
@@ -303,29 +145,14 @@ public class Propagation {
                 }
             }
             System.out.println("Done!");
+            
         } catch (IOException ex) {
+            //System.out.println(ex.getMessage());
             return false;
         }
         return true;
     }
 
-    public String getOntologyFile() {
-        return ontologyFile;
-    }
-
-    public Map<String, Set<String>> getSynonymsMap() {
-        return synonymsMap;
-    }
-
-    public Map<String, String> getTermToNamespace() {
-        return termToNamespace;
-    }
-
-    public Set<String> getLeafTerms() {
-        return leafTerms;
-    }
-    
-    //main method
     public static void main(String[] args) {
         if(args.length < 1){
             System.out.println("java Propagation -i <input HPO obo file> -o <output OBO file>");
@@ -347,16 +174,8 @@ public class Propagation {
             System.out.println("Please specify HPO OBO file!");
             return;
         }
-        if(oFile.length() == 0){
-            System.out.println("Please specify name of output file!");
-            return;
-        }
         
-        Propagation test = new Propagation(iFile);
-        //test.buildSynonymsMap();
-        boolean result = test.addNamespaceInfoToOboFile(oFile);
-        if(!result){
-            System.out.println("Operation failed!");
-        }
+        Propagation test = new Propagation(new OboParser(iFile));
+        test.addNamespaceInfoToOboFile(oFile);
     }
 }
