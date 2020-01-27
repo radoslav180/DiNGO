@@ -220,7 +220,7 @@ There are a few significant changes in the new version:
 - Given that repository at ftp.geneontology.org has not been updated for a while, DiNGO now downloads GO files from  the following [repository](http://current.geneontology.org/). As a consequence class [GOFileDownloader](src/update/GOFileDownloader.java) has been subject to numerous changes. Also, there is a new class [UniProtFileDownloader](src/update/UniProtFileDownloader.java).
 - Support for the following species has been dropped: Agrobacterium tumefaciens, Dickeya dadantii, Magnaporthe grisea and Oomycetes. Pseudomonas aeruginosa has been added to the list of supported species.
 - [HPO](https://hpo.jax.org/app/) has added two new subontologies: [Blood group](https://hpo.jax.org/app/browse/term/HP:0032223) and [Past medical history](https://hpo.jax.org/app/browse/term/HP:0032443). This change made [the Propagation module](#53-propagation-module-1) obsolete. Thus, the module is completely re-written to keep up with the changes.
-- [DiNGO.jar](https://www.vin.bg.ac.rs/180/tools/DiNGO.php) file is going to be updated very soon.
+- [DiNGO.jar](https://www.vin.bg.ac.rs/180/tools/DiNGO.php) file has been updated.
 
 DiNGO team, 18.01.2020.
 
