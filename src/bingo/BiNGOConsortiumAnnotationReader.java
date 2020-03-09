@@ -110,9 +110,8 @@ public class BiNGOConsortiumAnnotationReader implements IAnnotation {
     public BiNGOConsortiumAnnotationReader(String filename, String mappingFile, 
             Map<Integer, Integer> synonymHash, Set<String> deleteCodes,
                                            String annotationType, String curator) {
-        //System.out.println ("AnnotationFlatFileReader on " + filename);
+       
         this.filename = filename;
-        //System.out.println("Consortium constr filename = " + filename);
         this.species = filename;
         this.annotationType = annotationType;
         this.curator = curator;
@@ -174,7 +173,6 @@ public class BiNGOConsortiumAnnotationReader implements IAnnotation {
                         updateAlias(alias1, primaryID);
                     }
                     String goID = tokens[4].trim().toUpperCase().substring(3);
-                    // System.out.println("goID " + goID + "\n");
                     int id = stringToInt(goID);
                     Integer id2 = id;
                     Integer mainId = synonymHash.get(id2);
