@@ -111,7 +111,7 @@ The module downloads GO OBO and annotation files in the [GAF format](http://gene
 
 #### 5.1.2. HPO files
 
-The module downloads the HPO OBO file and two annotation files: phenotype_annotation.tab and all_sources_all_frequencies_genes_to_phenotype.txt (https://hpo.jax.org/app/download/annotation). In order to be used by DiNGO the files have to be processed. The HPO OBO file has no information about the term namespace (subontology) that is used by the DiNGO OBO file parser. Given that, after downloading the HPO OBO file will be updated with namespace information for each term (see [the Propagation module](#53-propagation-module-1)).On the other hand, information contained in the downloaded annotation files will be used for creation of the DiNGO compatible file. The new annotation file contains the gene and the associated HPO term in each line.
+The module downloads the HPO OBO file and two annotation files: phenotype.hpoa and genes_to_phenotype.txt (https://hpo.jax.org/app/download/annotation). In order to be used by DiNGO the files have to be processed. The HPO OBO file has no information about the term namespace (subontology) that is used by the DiNGO OBO file parser. Given that, after downloading the HPO OBO file will be updated with namespace information for each term (see [the Propagation module](#53-propagation-module-1)).On the other hand, information contained in the downloaded annotation files will be used for creation of the DiNGO compatible file. The new annotation file contains the gene and the associated HPO term in each line.
 
 #### 5.1.3. Uniprot mapping files
 
