@@ -101,9 +101,9 @@ public class HpoFileDownloader implements IFileDownload {
 
         if (!line.startsWith("#")) {//if line starts with # that is header
             String[] tokens = line.split("\\t");
-            if (termToSubontology.containsKey(tokens[3]) && (termToSubontology.get(tokens[3]).equals(hpOntology)
+            if (termToSubontology.containsKey(tokens[2]) && (termToSubontology.get(tokens[2]).equals(hpOntology)
                     || hpOntology.equals("W"))) {
-                writer.write(tokens[1] + "=" + tokens[3].split(":")[1]);
+                writer.write(tokens[1] + "=" + tokens[2].split(":")[1]);
                 writer.newLine();
             }
 
