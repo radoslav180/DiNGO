@@ -22,32 +22,33 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * <p>
  * Class responsible for downloading HPO ontology and annotation files</p>
- *
  * @author Radoslav Davidović
  */
 public class HpoFileDownloader implements IFileDownload {
 
-    private String annotationFileName;//name of downloaded file
-    private String fileAddress;//http address 
-    private String hpOntology;//subontology of HPO
-    private String downloadFolder;//folder where file will be downloaded
-    private String formatVersion;//format version of OBO file
-    private Date oboReleaseDate;//release date of HPO ontology
+    private String annotationFileName;// name of downloaded file
+    private String fileAddress;// http address
+    private String hpOntology;// subontology of HPO
+    private String downloadFolder;// folder where file will be downloaded
+    private String formatVersion;// format version of OBO file
+    private Date releaseDate;// release date of HPO ontology or annotation file
 
-    //Map contains term ID as a key and HPO sub-ontology as a value
+    // Map contains term ID as a key and HPO sub-ontology as a value
     private Map<String, String> termToSubontology = new HashMap<>();
 
+    /**
+     * <p>Constructor</p>
+     * @param fileAddress hhtp address of file
+     * @param downloadFolder folder where file will be placed after downloading
+     * @param hpOntology HPO namespace
+     */
     public HpoFileDownloader(String fileAddress, String downloadFolder, String hpOntology) {
         this.fileAddress = fileAddress;
         this.annotationFileName = "hp_annotation_" + hpOntology + ".txt";
@@ -55,24 +56,42 @@ public class HpoFileDownloader implements IFileDownload {
         this.hpOntology = hpOntology;
     }
 
-    //initialize termToSubontology map by reading and parsing phenotype_annotation.tab file (https://hpo.jax.org/app/download/annotation)
+    private static boolean isHpoTerm(String id){
+
+        return id.matches("^HP:\\d{7}$");
+    }
+
+
+    // initialize termToSubontology map by reading and parsing phenotype.hpoa file (https://hpo.jax.org/app/download/annotation)
+    // compatibility with new hpoa format
     private void initTermToSubontology(String phenotypeAnnotationFileAddress) throws IOException {
-        //final String address = configurator.getHpPhenotypeAnnotationAddress();
+        URL url = new URL(phenotypeAnnotationFileAddress);
+        String fileName = url.getFile();
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(phenotypeAnnotationFileAddress).openStream()))) {
             String line;
             String[] fields;
             while ((line = reader.readLine()) != null) {
+                if(line.startsWith("#") || line.startsWith("DatabaseID")){
+                    if(line.startsWith("#date:")){
+
+                        releaseDate = LocalFilesManager.convertStringToDate(line.split(":")[1], "yyyy-MM-dd");
+                    }
+                    continue;
+                }
                 fields = line.split("\\t");
-                termToSubontology.put(fields[4], fields[10]);//key = term, value = subontology of HPO
+                // keep compatibility with previous version
+                if(fields[10].equals("P")) fields[10] = "O";
+                termToSubontology.put(fields[3], fields[10]);//key = term, value = subontology of HPO
             }
         }
     }
     
-    //parses line from ALL_SOURCES_ALL_FREQUENCIES_genes_to_phenotype.txt (https://hpo.jax.org/app/download/annotation) and extracts info
+    //parses line from genes_to_phenotype.txt (https://hpo.jax.org/app/download/annotation) and extracts info
     //about gene and associated HPO term ID.
     //The input file has the following header : 
-    //#Format: entrez-gene-id<tab>entrez-gene-symbol<tab>HPO-Term-Name<tab>HPO-Term-ID
-    //Input line: 8192	CLPP	Seizures	HP:0001250
+    //#Format: entrez-gene-id<tab>entrez-gene-symbol<tab>HPO-Term-Name<tab>HPO-Term-ID<tab>Frequency-Raw<tab>Frequency-HPO<tab>Additional Info from G-D source<tab>G-D source<tab>disease-ID for link
+    //Input line: 8192	CLPP	HP:0001250	Seizure	-	HP:0040283	-	mim2gene	OMIM:614129
     //Output line: CLPP=0001250
     private void writeLineToFile(String line, String phenotypeAnnotationFileAddress, BufferedWriter writer) throws IOException {
 
@@ -123,8 +142,12 @@ public class HpoFileDownloader implements IFileDownload {
      */
     @Override
     public void downloadFile(String fileName) {
+
+        String outFile = fileName.endsWith(".obo") ? fileName : annotationFileName;
+        boolean isAnnotationFile = !fileName.endsWith(".obo");
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(fileAddress).openStream()));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(downloadFolder + fileName))) {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(downloadFolder + outFile))) {
             String line;
 
             while ((line = reader.readLine()) != null) {
@@ -135,57 +158,20 @@ public class HpoFileDownloader implements IFileDownload {
                 //works only for hp.obo file
                 if (line.startsWith("data-version:")) {
                     String[] tokens = line.split("/");
-                    String strRelease = tokens[tokens.length - 1].trim();
-                    try {
-                        oboReleaseDate = new SimpleDateFormat("yyyy-MM-dd").parse(strRelease);
-                    } catch (ParseException ex) {
-                        Logger.getLogger(HpoFileDownloader.class.getName()).log(Level.INFO, "Unparsable date " + strRelease, "");
-                    }
+                    releaseDate = LocalFilesManager.convertStringToDate(line.split(":")[1], "yyyy-MM-dd");
+                }
+                if(isAnnotationFile){
+                    writeLineToFile(line, fileName, writer);
+                }else{
+                    writer.write(line);
+                    writer.newLine();
                 }
 
-                writer.write(line);
-                writer.newLine();
             }
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
 
-    }
-
-    /**
-     * <p>
-     * Generates annotation file that can be read by DiNGO or BiNGO. The first
-     * line is header containing info about species, sub-ontology and
-     * curator:<br>
-     * (species=Homo Sapiens)(type=Mode Of Inheritance)(curator=HPO)<br>
-     * Other lines contain gene/protein identifier and associated term separated
-     * by equals sign: <br>
-     * CLPP=0000007 <br>
-     * A2M=0000006 <br>
-     * MKKS=0000007 <br>
-     * GDF5=0000006<br>
-     * GDF5=0000007 <br>
-     * TSR2=0001419 <br>
-     * AARS=0000006 <br>
-     * AARS=0000007<br>
-     * </p>
-     *
-     * @param phenotypeAnnotationFileAddress phenotype_annotation.tab file 
-     * <a href="https://hpo.jax.org/app/download/annotation">
-     * https://hpo.jax.org/app/download/annotation</a>
-     */
-    public void generateHpoAnnotationFile(String phenotypeAnnotationFileAddress) {
-        //String fileName = "hp_annotation_" + hpOntology + ".txt";
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(fileAddress).openStream()));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(downloadFolder + annotationFileName))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                writeLineToFile(line, phenotypeAnnotationFileAddress, writer);
-            }
-
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
     }
 
     public String getFileAddress() {
@@ -223,7 +209,7 @@ public class HpoFileDownloader implements IFileDownload {
 
     @Override
     public Date getReleaseDate() {
-        return oboReleaseDate;
+        return releaseDate;
     }
 
 }
