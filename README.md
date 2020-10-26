@@ -224,6 +224,10 @@ There are a few significant changes in the new version:
 
 DiNGO team, 18.01.2020.
 
+DiNGO is now compatible with [hpoa](https://hpo-annotation-qc.readthedocs.io/en/latest/annotationFormat.html#phenotype-hpoa-format) file format.
+
+DiNGO team, 26.10.2020.
+
 ## 9. References
 
 [1]	Maere S, Heymans K, Kuiper M. BiNGO: a Cytoscape plugin to assess overrepresentation of gene ontology categories in biological networks. Bioinforma Oxf Engl 2005;21:3448–9. doi:10.1093/bioinformatics/bti551.
