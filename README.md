@@ -224,7 +224,7 @@ There are a few significant changes in the new version:
 
 DiNGO team, 18.01.2020.
 
-DiNGO is now compatible with [hpoa](https://hpo-annotation-qc.readthedocs.io/en/latest/annotationFormat.html#phenotype-hpoa-format) file format.
+- DiNGO is now compatible with [hpoa](https://hpo-annotation-qc.readthedocs.io/en/latest/annotationFormat.html#phenotype-hpoa-format) file format.
 
 DiNGO team, 26.10.2020.
 
