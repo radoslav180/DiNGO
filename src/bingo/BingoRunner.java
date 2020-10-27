@@ -223,12 +223,12 @@ public class BingoRunner implements Runnable {
                             parser.getAlias().get(nodes[i].toUpperCase()));
 
                 }
-                // else{
+            
                 if (parser.getAlias().get(nodes[i]) != null) {
                     mapNames.add(parser.getAlias().get(nodes[i]));
                 }
                 canonicalNameVector.add(nodes[i]);
-                // }
+             
             }
         }
         return canonicalNameVector;
@@ -385,7 +385,7 @@ public class BingoRunner implements Runnable {
         Map correctionMap = null;
         BingoAlgorithm algorithm = new BingoAlgorithm(parser.getAnnotation(), parser.getOntology(), descriptor,
                 parser.getAlias(), selectedNodes, allNodes);
-        //BingoAlgorithm algorithm = new BingoAlgorithm(params, selectedNodes, allNodes);
+        
         CalculateTestTask test = algorithm.calculate_distribution();
 
         try {

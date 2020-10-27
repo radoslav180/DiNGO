@@ -81,7 +81,7 @@ public class Propagation {
                     }
                     //test if term is subontology root term
                     if(termToParents.get(t).size() == 1 && termToParents.get((termToParents.get(t).get(0))).isEmpty()){
-                        //System.out.println("Namespace: " + t.getName());
+                       
                         namespace = t.getName().toLowerCase().replace(" ", "_");
                     }
                     tempList.addAll(termToParents.get(t));

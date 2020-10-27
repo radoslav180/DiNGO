@@ -364,8 +364,8 @@ public final class BingoParameters {
             }
         }
         
-        namespace = getNamespaceFullName();//namespaceMap.get(namespace);
-        //System.out.println(namespace);
+        namespace = getNamespaceFullName();
+        
     }
     
     private String getNamespaceFullName(){

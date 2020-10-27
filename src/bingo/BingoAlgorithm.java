@@ -41,7 +41,6 @@ public class BingoAlgorithm {
         this.allNodes = allNodes;
     }
     
-    //trebalo bi uključiti i parent-child intersection
     public CalculateTestTask calculate_distribution() {
         
         CalculateTestTask test;

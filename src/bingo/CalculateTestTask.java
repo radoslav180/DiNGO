@@ -41,10 +41,6 @@ import java.util.Map;
  * <li>does not extends BingoTask class</li>
  * <li>added {@link #calculate()}</li>
  * </ol>
- * Classes that perform statistical tests can implement this interface so that
- * they can be monitored by a GUI like a
- * <code>javax.swing.plaf.ProgressBarUI</code> or a
- * <code>javax.swing.ProgressMonitor</code>
  */
 
 public abstract class CalculateTestTask {

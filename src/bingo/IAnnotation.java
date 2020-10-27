@@ -10,7 +10,7 @@ import java.util.Map;
 import ontology.Annotation;
 
 /**
- *
+ *<p>Classes that read annotation files should implement this interface<p>
  * @author radoslav davidović
  */
 public interface IAnnotation {

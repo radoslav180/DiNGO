@@ -72,7 +72,6 @@ public class BiNGOOntologyOboReader implements IOntologyReader {
         this.filename = filename;
         this.namespace = namespace;
         this.synonymHash = new HashMap<>();
-        //this.goMap = new HashMap();
 
         parse();
 
@@ -111,9 +110,8 @@ public class BiNGOOntologyOboReader implements IOntologyReader {
     }
 
     //modified version of Bingo parse() method
-    //
     private void parse() {
-        //System.out.println("Curator:" + curator + "\nType of ontology: " + ontologyType);
+        
         String name = "";
         String id = "";
         HashSet<String> geneNamespaces = new HashSet<>();
@@ -336,7 +334,6 @@ public class BiNGOOntologyOboReader implements IOntologyReader {
             }
             fw.close();
         } catch (IOException e) {
-            //System.out.println("IOException: " + e);
             e.printStackTrace();
         }
     }

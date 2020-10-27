@@ -363,7 +363,7 @@ public final class DiNGOFilesUpdater {
         pBar.setShowProgressBar(false);
 
         boolean success = downloader.downloadHUGOFile();
-        //String filename = downloader.getFileName();
+        
         if (success) {
             System.out.println("Parsing " + fileName);
             HUGOFlatFileCreator test = new HUGOFlatFileCreator(fileName);
@@ -470,7 +470,7 @@ public final class DiNGOFilesUpdater {
                         System.out.println("Unknown argument " + dValue);
                         break;
                 }
-                //filesUpdater.updateHPOFiles(attribute);
+               
 
             } else {
 

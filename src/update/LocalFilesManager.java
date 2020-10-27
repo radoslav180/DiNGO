@@ -109,7 +109,7 @@ public class LocalFilesManager{
             String line;
             while((line = reader.readLine()) != null){
                 if(line.contains(fileName)){
-                    //System.out.println(line.split("=")[1]);
+                   
                     entries.add(line.split("=")[1]);
                 }
             }
@@ -118,7 +118,7 @@ public class LocalFilesManager{
         }
 
         if(!entries.isEmpty()){
-            String reprDate = entries.get(entries.size() - 1);//last entry//Collections.max(entries);
+            String reprDate = entries.get(entries.size() - 1);
 
             try {
                lastModTime = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy").parse(reprDate);

@@ -57,10 +57,6 @@ import java.util.*;
  *  <li>methods {@link #getOrdenedGOLabels()} and {@link #getOrdenedPvalues()} are not abstract any more</li>
  * </li>
  * </ol>
- * Classes that perform multiple testing corrections can implement this
- * interface so that they can be monitored by a GUI like a
- * <code>javax.swing.plaf.ProgressBarUI</code> or a
- * <code>javax.swing.ProgressMonitor</code>
  */
 
 public abstract class CalculateCorrectionTask {

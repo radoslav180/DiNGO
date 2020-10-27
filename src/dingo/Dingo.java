@@ -67,7 +67,7 @@ public final class Dingo {
                 params.getOntologyFile(), params.getAnnotationFile(),
                 params.getNameSpace(), params.getMappingFile());//params.initializeAnnotationParser();
 
-        //System.out.println("\nCalling annotation parser...");
+       
         if (annParser.getStatus()) {
             try {
                 annParser.calculate();
@@ -77,8 +77,7 @@ public final class Dingo {
             }
 
         }
-        //System.out.println(annParser.getAnnotation());
-        //System.out.println("Calling annotation parser...DONE!!");
+        
         return annParser;
     }
 
@@ -224,7 +223,7 @@ public final class Dingo {
             }
 
         } else {
-            //params.setNumberOfClusters(1);
+            
             System.out.println("Cluster name: " + params.getClusterName());
             BingoRunner test = new BingoRunner(annParser, descriptor, dataSets[0], params.getClusterName(), params.getFileOutputDir(),
                     numberOfSets);

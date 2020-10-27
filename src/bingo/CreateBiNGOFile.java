@@ -224,7 +224,6 @@ public final class CreateBiNGOFile {
                     }
                 }
             }
-            //output.write(name + "\t");
 
         }
 
@@ -336,7 +335,6 @@ public final class CreateBiNGOFile {
                     writer.println(line.toString());
 
             }
-            //System.out.println("dingo results file: " + results.getPath());
 
         } catch (IOException ex) {
             System.out.println("Unable to write to file!");

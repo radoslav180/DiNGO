@@ -133,14 +133,14 @@ public class StandardDistributionCount extends DistributionCount {
         HashSet<String> classifications = new HashSet<>();
         Set<String> identifiers = alias.get(node + "");
         if (identifiers != null) {
-            //System.out.print(identifiers + " ");
+            
             Iterator it = identifiers.iterator();
             int[] goID;
             while (it.hasNext()) {
                 goID = annotation.getClassifications(it.next() + "");
                 
                 for (int t = 0; t < goID.length; t++) {
-                    //System.out.print(goID[t] + " ");
+                    
                     classifications.add(goID[t] + "");
                     // omitted : all parent classes of GO class that node is
                     // assigned to are also explicitly included in
@@ -149,7 +149,7 @@ public class StandardDistributionCount extends DistributionCount {
                 }
                 
             }
-            //System.out.println("");
+        
         }
         return classifications;
     }

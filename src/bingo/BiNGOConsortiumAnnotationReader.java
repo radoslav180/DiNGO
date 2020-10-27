@@ -99,14 +99,7 @@ public class BiNGOConsortiumAnnotationReader implements IAnnotation {
      */
     private boolean consistency = false;
 
-    // -------------------------------------------------------------------------
-    /*
-    public BiNGOConsortiumAnnotationReader(File file, Map<Integer, Integer> synonymHash, Set<String> deleteCodes,
-                                           String annotationType, String curator) {
-        this(file.getPath(), synonymHash, deleteCodes, annotationType, curator);
-    }
-    */
-    // -------------------------------------------------------------------------
+   
     public BiNGOConsortiumAnnotationReader(String filename, String mappingFile, 
             Map<Integer, Integer> synonymHash, Set<String> deleteCodes,
                                            String annotationType, String curator) {

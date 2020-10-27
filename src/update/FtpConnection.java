@@ -66,7 +66,7 @@ public class FtpConnection{
 		String modDate;
 		if(isChanged){
 			modDate = ftpClient.getModificationTime(fileName);
-			ftpClient.changeWorkingDirectory("/");//reset to root directory
+			ftpClient.changeWorkingDirectory("/");// reset to root directory
 		}
 		else{
 			return null;

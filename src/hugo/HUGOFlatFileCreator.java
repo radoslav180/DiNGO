@@ -67,7 +67,7 @@ public class HUGOFlatFileCreator {
             }
             for (int i = 0; i < elements.size(); i++) {
                 List<Element> docs = elements.get(i).getChildren("doc");
-                //System.out.println("doc number is " + docs.size());
+                
                 for (Element doc : docs) {
                     List<Element> ids = doc.getChildren();
 

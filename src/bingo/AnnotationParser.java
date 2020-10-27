@@ -212,7 +212,6 @@ public class AnnotationParser {
             if (fileString.contains("gene_association")
                     || fileString.contains("phenotype_annotation")
                     || fileString.endsWith(".gaf")) {
-                //System.out.println("reading file...");
 
                 readerAnnotation = new BiNGOConsortiumAnnotationReader(fileString, mappingFile,
                         synonymHash, deleteCodes, "Consortium", "GO");//params.getDeleteCodes()
@@ -227,7 +226,7 @@ public class AnnotationParser {
                 consistency = true;
             }
             alias = readerAnnotation.getAlias();
-            //System.out.println("alias = " + alias.size());
+            
             resultString = LOADCORRECT;
         } catch (IllegalArgumentException e) {
             resultString = "ANNOTATION FILE PARSING ERROR, PLEASE CHECK FILE FORMAT:  \n" + e;
@@ -279,8 +278,7 @@ public class AnnotationParser {
             if (ontology.size() == 0 || (fullOntology != null && fullOntology.size() == 0)) {
                 throw (new IllegalArgumentException());
             } else {
-                //this.synonymHash = readerOntology.getSynonymHash();
-                //System.out.println("synonymHash = " + synonymHash.size());
+                
                 resultString = LOADCORRECT;
             }
         } catch (IllegalArgumentException e) {
@@ -372,8 +370,7 @@ public class AnnotationParser {
                     parsedAnnotation.add(node, parents[t]);
                 }
                 up(node, parents[t], parsedAnnotation, ontology, flOntology);
-                // else{System.out.println("term not in ontology: "+
-                // parents[t]);}
+                
             }
         }
     }

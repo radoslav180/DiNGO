@@ -180,7 +180,6 @@ public class BiNGOAnnotationFlatFileReader implements IAnnotation {
             System.out.println(ex.getMessage());
         }
 
-        //System.out.println("Annotation file processed!");
         
     } // parse
     // -------------------------------------------------------------------------
@@ -197,7 +196,7 @@ public class BiNGOAnnotationFlatFileReader implements IAnnotation {
                         HashSet<String> temp = alias.get(f);
                         temp.addAll(Arrays.asList(fields));
                         alias.put(f, temp);
-                        //System.out.println(alias.get(f));
+                        
                     } else{
                         alias.put(f, new HashSet<>(Arrays.asList(fields)));
                     }
