@@ -54,12 +54,10 @@ public class LocalFilesManager{
 
                 if(line.startsWith("data-version")){
                     timeStr = line.split("/")[1];
-                    //System.out.println("Release date of ontology file" + pathToObo + " " + timeStr);
                     break;
                 }
                 if(line.startsWith("!Generated: ")){
                     timeStr = line.split("\\s+")[1];
-                    //System.out.println("Release date of annotation file" + pathToObo + " " + timeStr);
                     break;
                 }
 
@@ -69,7 +67,7 @@ public class LocalFilesManager{
             System.out.println(e.getMessage());
             return null;
         }
-        //System.out.println("Time string: " + timeStr);
+
         Date releaseDate = null;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");//parse, for example, 2016-09-03 string to date
         try {
