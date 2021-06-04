@@ -228,7 +228,7 @@ DiNGO team, 18.01.2020.
 
 DiNGO team, 26.10.2020.
 
-- Fixed bug that prevented DiNGO to use [GAF file format 2.2](http://geneontology.org/docs/go-annotation-file-gaf-format-2.2/). 
+- Fixed bug that prevented DiNGO from using [GAF file format 2.2](http://geneontology.org/docs/go-annotation-file-gaf-format-2.2/). 
 - [DiNGO.jar](https://www.vin.bg.ac.rs/180/tools/DiNGO.php) will be updated as soon as possible.
 
 DiNGO team, 04.06.2021.
