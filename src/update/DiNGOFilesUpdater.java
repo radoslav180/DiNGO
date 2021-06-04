@@ -1,7 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (c) 2019. Institute of Nuclear Sciences Vinča
+ * Author: Radoslav Davidović
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package update;
 
@@ -43,7 +53,7 @@ public final class DiNGOFilesUpdater {
         if (oldDate == null) {
             return true;
         }
-        //System.out.println("Old date: " + oldDate + "\nNew Date: " + newDate);
+
         return newDate.compareTo(oldDate) > 0;
     }
     
@@ -121,7 +131,7 @@ public final class DiNGOFilesUpdater {
      * @param fileName name of downloaded file
      */
     private void updateGOFile(String fileName) {
-        //String subFolder = configurator.getPathToOboFile();
+
         String dingoFilesFolder = configurator.getDirFiles();//folder with annotation resources
         String downloadFolder = configurator.getDownloadFolder();//DiNGO download folder
         String link = configurator.getGoConsortiumAddress();//get link
@@ -148,10 +158,10 @@ public final class DiNGOFilesUpdater {
 
         Date lastModDate = fileDownloader.getReleaseDate();//LocalFilesManager.extractOboReleaseDate(downloadFolder + fileName);
         Date currentFileDate = LocalFilesManager.extractOboReleaseDate(dingoFilesFolder + fileName);
-
         if(currentFileDate != null){
             System.out.println("Releasing date of current file located at " + dingoFilesFolder + ": " + currentFileDate);
         }
+            
         System.out.println("Releasing date of downloaded file located at " + downloadFolder + ": " + lastModDate);
 
         if (compareDate(currentFileDate, lastModDate)) {
@@ -273,9 +283,12 @@ public final class DiNGOFilesUpdater {
         Date currentOborelease = LocalFilesManager.extractOboReleaseDate(dataFolder
                 + currentOboFile);
         Date newOboRelease = fileDownloader.getReleaseDate();
-
-        System.out.println("Releasing date of current file located at "
+        
+        if(currentOborelease != null){
+            System.out.println("Releasing date of current file located at "
                 + dataFolder + ": " + currentOborelease);
+        }
+        
         System.out.println("Releasing date of downloaded file located at "
                 + downloadFolder + ": " + newOboRelease);
 
@@ -283,13 +296,12 @@ public final class DiNGOFilesUpdater {
 
         if (isObsolete) {
             boolean isNamespaceAdded = addNamespacesToObo(configurator.getDownloadFolder() + oboFile);
-            //String oboFileName = isNamespaceAdded ? configurator.getHpoOntologyFileName() : "hp.obo";
+
             if (!isNamespaceAdded) {
                 LocalFilesManager.renameFile(configurator.getDownloadFolder()
                         + oboFile, configurator.getDownloadFolder()
                         + configurator.getHpoOntologyFileName());
             }
-            //if (isNamespaceAdded) {
 
             boolean isUpdated = replaceFile(configurator.getDownloadFolder()
                     + configurator.getHpoOntologyFileName(),
@@ -305,8 +317,6 @@ public final class DiNGOFilesUpdater {
                         + configurator.getHpoOntologyFileName()
                         + " can't be moved to " + configurator.getDirFiles());
             }
-
-            //}
         }
     }
 
@@ -315,13 +325,14 @@ public final class DiNGOFilesUpdater {
         String downloadFolder = configurator.getDownloadFolder();
         fileDownloader = new HpoFileDownloader(address, downloadFolder, hpOntology);
 
-        HpoFileDownloader hfd = (HpoFileDownloader) fileDownloader;
-        //System.out.println("Downloading " + fileName + " from " + link);
         ProgressBar pBar = new ProgressBar();
         pBar.start();
 
-        hfd.generateHpoAnnotationFile(configurator.getHpPhenotypeAnnotationAddress());
+        fileDownloader.downloadFile(configurator.getHpPhenotypeAnnotationAddress());
+
         pBar.setShowProgressBar(false);
+
+        HpoFileDownloader hfd = (HpoFileDownloader) fileDownloader;
 
         boolean isAnnotationUpdated = replaceFile(configurator.getDownloadFolder()
                 + hfd.getAnnotationFileName(), configurator.getDirFiles() + hfd.getAnnotationFileName());
@@ -365,7 +376,7 @@ public final class DiNGOFilesUpdater {
         pBar.setShowProgressBar(false);
 
         boolean success = downloader.downloadHUGOFile();
-        
+
         if (success) {
             System.out.println("Parsing " + fileName);
             HUGOFlatFileCreator test = new HUGOFlatFileCreator(fileName);
@@ -472,7 +483,7 @@ public final class DiNGOFilesUpdater {
                         System.out.println("Unknown argument " + dValue);
                         break;
                 }
-               
+
 
             } else {
 
@@ -510,3 +521,4 @@ public final class DiNGOFilesUpdater {
 
     }
 }
+
