@@ -228,6 +228,10 @@ DiNGO team, 18.01.2020.
 
 DiNGO team, 26.10.2020.
 
+- Fixed bug that prevented DiNGO to use [GAF file format 2.2](http://geneontology.org/docs/go-annotation-file-gaf-format-2.2/).
+
+DiNGO team, 04.06.2021.
+
 ## 9. References
 
 [1]	Maere S, Heymans K, Kuiper M. BiNGO: a Cytoscape plugin to assess overrepresentation of gene ontology categories in biological networks. Bioinforma Oxf Engl 2005;21:3448–9. doi:10.1093/bioinformatics/bti551.
