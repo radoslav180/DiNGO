@@ -149,7 +149,9 @@ public final class DiNGOFilesUpdater {
         Date lastModDate = fileDownloader.getReleaseDate();//LocalFilesManager.extractOboReleaseDate(downloadFolder + fileName);
         Date currentFileDate = LocalFilesManager.extractOboReleaseDate(dingoFilesFolder + fileName);
 
-        System.out.println("Releasing date of current file located at " + dingoFilesFolder + ": " + currentFileDate);
+        if(currentFileDate != null){
+            System.out.println("Releasing date of current file located at " + dingoFilesFolder + ": " + currentFileDate);
+        }
         System.out.println("Releasing date of downloaded file located at " + downloadFolder + ": " + lastModDate);
 
         if (compareDate(currentFileDate, lastModDate)) {
