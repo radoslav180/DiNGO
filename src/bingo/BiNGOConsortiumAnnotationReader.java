@@ -152,9 +152,8 @@ public class BiNGOConsortiumAnnotationReader implements IAnnotation {
 
                 tokens = line.split("\t");
                 String evidenceCode = tokens[6].trim().toUpperCase();
-                String qualifier = tokens[3].trim();
 
-                if (!deleteCodes.contains(evidenceCode) && (qualifier.length() == 0)) {
+                if (!deleteCodes.contains(evidenceCode)) {
                     String primaryID = tokens[1].trim().toUpperCase();
                     updateAlias(primaryID, primaryID);
 
