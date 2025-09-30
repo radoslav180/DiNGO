@@ -242,6 +242,10 @@ DiNGO team, 26.10.2020.
 
 DiNGO team, 04.06.2021.
 
+- A new annotation module has been introduced to support the generation of a flat HPO annotation file. This functionality is required because HPO annotation files in hpoa or txt format cannot be retrieved automatically.
+
+DiNGO team, 30.09.2025.
+
 ## 9. References
 
 [1]	Maere S, Heymans K, Kuiper M. BiNGO: a Cytoscape plugin to assess overrepresentation of gene ontology categories in biological networks. Bioinforma Oxf Engl 2005;21:3448–9. doi:10.1093/bioinformatics/bti551.
