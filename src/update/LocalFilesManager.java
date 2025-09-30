@@ -54,8 +54,7 @@ public class LocalFilesManager{
      */
     public String[] getAllFilesInDirectory(){
         File dir = new File(directory);
-        String[] dirFiles = dir.list();
-        return dirFiles;
+        return dir.list();
     }
 
     /**

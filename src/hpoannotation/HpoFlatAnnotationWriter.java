@@ -9,13 +9,6 @@ public class HpoFlatAnnotationWriter {
     private String hpOntology;
     private final Map<String, String> termToSubontology;
 
-    public HpoFlatAnnotationWriter(String hpOntology, Map<String, String> termToSubontology)
-    {
-        this.annotationFileName = "hp_annotation_" + hpOntology + ".txt";
-        this.termToSubontology = termToSubontology;
-        this.hpOntology = hpOntology;
-    }
-
     public HpoFlatAnnotationWriter(HpoOntology hpoOntology, Map<String, String> termToSubontology){
         this.hpOntology = hpoOntology.toString().toLowerCase();
         this.annotationFileName = "hpo_" + hpOntology + ".txt";

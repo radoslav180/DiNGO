@@ -55,7 +55,7 @@ public class Propagation {
     }
     /**
      * <p>Method finds path from specified term to root term</p>
-     * @param term 
+     * @param term ontology term
      * @return list of terms that represents path from term to the root
      */
     public List<Term> propagateTerm(Term term) {
