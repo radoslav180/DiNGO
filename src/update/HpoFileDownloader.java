@@ -33,105 +33,24 @@ import java.util.Map;
  */
 public class HpoFileDownloader implements IFileDownload {
 
-    private String annotationFileName;// name of downloaded file
     private String fileAddress;// http address
-    private String hpOntology;// subontology of HPO
     private String downloadFolder;// folder where file will be downloaded
     private String formatVersion;// format version of OBO file
     private Date releaseDate;// release date of HPO ontology or annotation file
-
-    // Map contains term ID as a key and HPO sub-ontology as a value
-    private Map<String, String> termToSubontology = new HashMap<>();
 
     /**
      * <p>Constructor</p>
      * @param fileAddress hhtp address of file
      * @param downloadFolder folder where file will be placed after downloading
-     * @param hpOntology HPO namespace
      */
-    public HpoFileDownloader(String fileAddress, String downloadFolder, String hpOntology) {
+    public HpoFileDownloader(String fileAddress, String downloadFolder) {
         this.fileAddress = fileAddress;
-        this.annotationFileName = "hp_annotation_" + hpOntology + ".txt";
         this.downloadFolder = downloadFolder;
-        this.hpOntology = hpOntology;
     }
 
     private static boolean isHpoTerm(String id){
 
         return id.matches("^HP:\\d{7}$");
-    }
-
-
-    // initialize termToSubontology map by reading and parsing phenotype.hpoa file (https://hpo.jax.org/app/download/annotation)
-    // compatibility with new hpoa format
-    private void initTermToSubontology(String phenotypeAnnotationFileAddress) throws IOException {
-        URL url = new URL(phenotypeAnnotationFileAddress);
-        String fileName = url.getFile();
-
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(phenotypeAnnotationFileAddress).openStream()))) {
-            String line;
-            String[] fields;
-            while ((line = reader.readLine()) != null) {
-                if(line.startsWith("#") || line.startsWith("DatabaseID")){
-                    if(line.startsWith("#date:")){
-
-                        releaseDate = LocalFilesManager.convertStringToDate(line.split(":")[1], "yyyy-MM-dd");
-                    }
-                    continue;
-                }
-                fields = line.split("\\t");
-                // keep compatibility with previous version
-                if(fields[10].equals("P")) fields[10] = "O";
-                termToSubontology.put(fields[3], fields[10]);//key = term, value = subontology of HPO
-            }
-        }
-    }
-    
-    //parses line from genes_to_phenotype.txt (https://hpo.jax.org/app/download/annotation) and extracts info
-    //about gene and associated HPO term ID.
-    //The input file has the following header : 
-    //#Format: entrez-gene-id<tab>entrez-gene-symbol<tab>HPO-Term-Name<tab>HPO-Term-ID<tab>Frequency-Raw<tab>Frequency-HPO<tab>Additional Info from G-D source<tab>G-D source<tab>disease-ID for link
-    //Input line: 8192	CLPP	HP:0001250	Seizure	-	HP:0040283	-	mim2gene	OMIM:614129
-    //Output line: CLPP=0001250
-    private void writeLineToFile(String line, String phenotypeAnnotationFileAddress, BufferedWriter writer) throws IOException {
-
-        if (termToSubontology.isEmpty()) {
-            initTermToSubontology(phenotypeAnnotationFileAddress);
-        }
-
-        if (!line.startsWith("#")) {//if line starts with # that is header
-            String[] tokens = line.split("\\t");
-            if (termToSubontology.containsKey(tokens[2]) && (termToSubontology.get(tokens[2]).equals(hpOntology)
-                    || hpOntology.equals("W"))) {
-                writer.write(tokens[1] + "=" + tokens[2].split(":")[1]);
-                writer.newLine();
-            }
-
-        } else {
-            //instead of writing first line beginning with # write to file (species=Homo Sapiens)(type=Full)(curator=HPO)
-            switch (hpOntology) {
-                case "O":
-                    writer.write("(species=Homo Sapiens)(type=Phenotypic Abnormality)(curator=HPO)");
-                    break;
-                case "C":
-                    writer.write("(species=Homo Sapiens)(type=Clinical Course)(curator=HPO)");
-                    break;
-                case "I":
-                    writer.write("(species=Homo Sapiens)(type=Mode Of Inheritance)(curator=HPO)");
-                    break;
-                case "M":
-                    writer.write("(species=Homo Sapiens)(type=Clinical Modifier)(curator=HPO)");
-                    break;
-                case "W":
-                    writer.write("(species=Homo Sapiens)(type=Full)(curator=HPO)"); //all sub-ontologies
-                    break;
-                default:
-                    writer.write("HPO subontology has not been specified. Choose between: C, I, M, O and W");
-                    break;
-            }
-            writer.newLine();
-        }
-
     }
 
     /**
@@ -143,29 +62,23 @@ public class HpoFileDownloader implements IFileDownload {
     @Override
     public void downloadFile(String fileName) {
 
-        String outFile = fileName.endsWith(".obo") ? fileName : annotationFileName;
-        boolean isAnnotationFile = !fileName.endsWith(".obo");
-
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(fileAddress).openStream()));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(downloadFolder + outFile))) {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(downloadFolder + fileName))) {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                //works only for hp.obo file
+
                 if (line.startsWith("format-version")) {
                     formatVersion = line;
                 }
-                //works only for hp.obo file
+
                 if (line.startsWith("data-version:")) {
                     String[] tokens = line.split("/");
                     releaseDate = LocalFilesManager.convertStringToDate(line.split(":")[1], "yyyy-MM-dd");
                 }
-                if(isAnnotationFile){
-                    writeLineToFile(line, fileName, writer);
-                }else{
-                    writer.write(line);
-                    writer.newLine();
-                }
+
+                writer.write(line);
+                writer.newLine();
 
             }
         } catch (IOException ex) {
@@ -193,18 +106,6 @@ public class HpoFileDownloader implements IFileDownload {
 
     public void setDownloadFolder(String downloadFolder) {
         this.downloadFolder = downloadFolder;
-    }
-
-    public String getHpOntology() {
-        return hpOntology;
-    }
-
-    public void setHpOntology(String hpOntology) {
-        this.hpOntology = hpOntology;
-    }
-
-    public String getAnnotationFileName() {
-        return annotationFileName;
     }
 
     @Override

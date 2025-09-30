@@ -264,14 +264,14 @@ public final class DiNGOFilesUpdater {
         updateGafFile();
     }
 
-    private void updateHPOboFile(String hpOntology) {
+    private void updateHPOboFile() {
         String oboFile = "hp.obo";
         String address = configurator.getHpOboAddress();
         String dataFolder = configurator.getDirFiles();
         String downloadFolder = configurator.getDownloadFolder();
         String currentOboFile = configurator.getHpoOntologyFileName();
 
-        fileDownloader = new HpoFileDownloader(address, downloadFolder, hpOntology);
+        fileDownloader = new HpoFileDownloader(address, downloadFolder);
         System.out.println("Downloading " + oboFile + " from " + address);
 
         ProgressBar pBar = new ProgressBar();
@@ -320,42 +320,20 @@ public final class DiNGOFilesUpdater {
         }
     }
 
-    private void updateHPAnnotationFile(String hpOntology) {
-        String address = configurator.getHpAnnotationAddress();
-        String downloadFolder = configurator.getDownloadFolder();
-        fileDownloader = new HpoFileDownloader(address, downloadFolder, hpOntology);
+    private void updateHPAnnotationFile() {
 
-        ProgressBar pBar = new ProgressBar();
-        pBar.start();
+        System.out.println("Can't update HPO annotation file, please download manually necessary files and create HPO " +
+                "annotation file using hpoannotation module. For more info see README file.");
 
-        fileDownloader.downloadFile(configurator.getHpPhenotypeAnnotationAddress());
-
-        pBar.setShowProgressBar(false);
-
-        HpoFileDownloader hfd = (HpoFileDownloader) fileDownloader;
-
-        boolean isAnnotationUpdated = replaceFile(configurator.getDownloadFolder()
-                + hfd.getAnnotationFileName(), configurator.getDirFiles() + hfd.getAnnotationFileName());
-
-        if (isAnnotationUpdated) {
-            System.out.println("Annotation file " + configurator.getDirFiles() + hfd.getAnnotationFileName()
-                    + " has been successfully updated!");
-        } else {
-            System.out.println("File " + configurator.getDownloadFolder() + hfd.getAnnotationFileName()
-                    + " can't be moved to " + configurator.getDirFiles());
-        }
     }
 
     /**
      * <p>
      * Updates HPO ontology and annotation files</p>
-     *
-     * @param hpOntology namespace (for example, I stands for Mode of
-     * Inheritance)
      */
-    private void updateHPOFiles(String hpOntology) {
-        updateHPOboFile(hpOntology);
-        updateHPAnnotationFile(hpOntology);
+    private void updateHPOFiles() {
+        updateHPOboFile();
+        updateHPAnnotationFile();
     }
 
     /**
@@ -412,13 +390,7 @@ public final class DiNGOFilesUpdater {
             System.out.println("Unknown command: " + args[0]);
             return;
         }
-        //list containing labels for HPO subontologies
-        //O = organ abnormality
-        //C = clinical course
-        //I = mode of inheritance
-        //M = clinical modifier
-        //W = all subontologies
-        List<String> hpSubOntology = new ArrayList<>(Arrays.asList("O", "C", "I", "M", "W"));
+
         Configurator conf = new Configurator();
         conf.createDiNGOFolders();
         DiNGOFilesUpdater filesUpdater;
@@ -443,9 +415,11 @@ public final class DiNGOFilesUpdater {
         }
 
         if (fileType.equalsIgnoreCase("GO")) {
-            if (attribute.length() == 0) {
+
+            if (attribute.isEmpty()) {
                 attribute = "human";
             }
+
             filesUpdater = new DiNGOFilesUpdater(attribute);
             switch (dValue) {
                 case "1":
@@ -465,33 +439,21 @@ public final class DiNGOFilesUpdater {
         } else if (fileType.equalsIgnoreCase("HPO")) {
 
             filesUpdater = new DiNGOFilesUpdater("human");
-            if (attribute.length() == 0) {
-                attribute = "W";
-            }
-            if (hpSubOntology.contains(attribute)) {
-                switch (dValue) {
-                    case "1":
-                        filesUpdater.updateHPOboFile(attribute);
-                        break;
-                    case "2":
-                        filesUpdater.updateHPAnnotationFile(attribute);
-                        break;
-                    case "3":
-                        filesUpdater.updateHPOFiles(attribute);
-                        break;
-                    default:
-                        System.out.println("Unknown argument " + dValue);
-                        break;
-                }
 
+            switch (dValue) {
+                case "1":
+                    filesUpdater.updateHPOboFile();
+                    break;
+                case "2":
+                    filesUpdater.updateHPAnnotationFile();
+                    break;
+                case "3":
+                    filesUpdater.updateHPOFiles();
+                    break;
+                default:
+                    System.out.println("Unknown argument " + dValue);
+                    break;
 
-            } else {
-
-                System.out.println("The following values for HPO subontologies are allowed:");
-                System.out.println("1. 0 - phenotypic abnormality\n2. I - inheritance\n"
-                        + "3. C - clinical course\n4. M - clinical modifier\n"
-                        + "5. W - all subontologies");
-                System.out.println("Unknown identifier: " + attribute);
             }
 
         } else if (fileType.equalsIgnoreCase("HUGO")) {
@@ -500,9 +462,11 @@ public final class DiNGOFilesUpdater {
             filesUpdater.updateHUGOFile();
 
         } else if (fileType.equalsIgnoreCase("UniProt")) {
-            if (attribute.length() == 0) {
+
+            if (attribute.isEmpty()) {
                 attribute = "human";
             }
+
             filesUpdater = new DiNGOFilesUpdater(attribute);
             filesUpdater.updateUniProtMappingFile();
 

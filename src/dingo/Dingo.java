@@ -30,7 +30,7 @@ public final class Dingo {
      * @return array containing individual data sets
      */
     private static String[] getDataSets(String text) {
-        //System.out.println("text:\n " + text);
+
         return text.split("batch");
     }
     //display parameters of enrichment analysis
@@ -117,7 +117,7 @@ public final class Dingo {
 
         Configurator config;
 
-        if (species == null || species.length() == 0) {
+        if (species == null || species.isEmpty()) {
             if (ontologyName.equalsIgnoreCase("HPO")) {
                 species = "human";
                 config = new Configurator(species);
@@ -134,6 +134,7 @@ public final class Dingo {
         }
 
         config.createDiNGOFolders();
+
         //if annotation file is not specified try to use default one. In the case
         //default annotation file does not exist download it
         if (ontologyName.equalsIgnoreCase("GO")) {
@@ -177,6 +178,7 @@ public final class Dingo {
                 if (!new File(annotationFile).exists()) {
                     DiNGOFilesUpdater.main(new String[]{"update", "-f", "HPO",
                         "-d", "2"});
+                    return;
                 }
                 params.setAnnotationFile(annotationFile);
             }
@@ -204,7 +206,7 @@ public final class Dingo {
 
             for (int i = 0; i < numberOfSets; ++i) {
 
-                clusterName = dataSets[i].split("\\s+")[0].equals("")
+                clusterName = dataSets[i].split("\\s+")[0].isEmpty()
                         ? dataSets[i].split("\\s+")[1]
                         : dataSets[i].split("\\s+")[0];
 
@@ -233,7 +235,7 @@ public final class Dingo {
 
         Instant end = Instant.now();
         long execTime = Duration.between(start, end).getSeconds();
-        System.out.println("");
+        System.out.println();
         System.out.println("Execution time: " + execTime + " s");
     }
 

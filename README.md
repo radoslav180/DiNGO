@@ -20,6 +20,7 @@
    - ## [5.2. Mapping module](#52-mapping-module-1)
         - ## [5.2.1. Usage](#521-usage-1)
    - ## [5.3. Propagation module](#53-propagation-module-1)
+   - ## [5.4. HPO annotation module](#54-hpo-annotation-module-1)
 ## [6. Usage examples](#6-usage-examples-1)
    - ## [6.1 Enrichment analysis with default ontology and annotation files](#61-enrichment-analysis-with-default-ontology-and-annotation-files-1)
    - ## [6.2 Enrichment analysis with user defined ontology and annotation files](#62-enrichment-analysis-with-user-defined-ontology-and-annotation-files-1)
@@ -99,7 +100,7 @@ Similarly, it is possible to use the -s mouse instead of the -s Mus_musculus or 
 
 ## 5. Modules
 
-DiNGO’s functionality is extended by three modules: update, mapping and propagation module. Each of them could be used as a separate application.
+DiNGO’s functionality is extended by four modules: update, mapping, propagation and hpoannotation module. Each of them could be used as a separate application.
 
 ### 5.1. Update module
 
@@ -111,7 +112,7 @@ The module downloads GO OBO and annotation files in the [GAF format](http://gene
 
 #### 5.1.2. HPO files
 
-The module downloads the HPO OBO file and two annotation files: phenotype.hpoa and genes_to_phenotype.txt (https://hpo.jax.org/app/download/annotation). In order to be used by DiNGO the files have to be processed. The HPO OBO file has no information about the term namespace (subontology) that is used by the DiNGO OBO file parser. Given that, after downloading the HPO OBO file will be updated with namespace information for each term (see [the Propagation module](#53-propagation-module-1)).On the other hand, information contained in the downloaded annotation files will be used for creation of the DiNGO compatible file. The new annotation file contains the gene and the associated HPO term in each line.
+The module downloads the HPO OBO file ~~and two annotation files: phenotype.hpoa and genes_to_phenotype.txt (https://hpo.jax.org/app/download/annotation)~~. In order to be used by DiNGO the files have to be processed. The HPO OBO file has no information about the term namespace (subontology) that is used by the DiNGO OBO file parser. Given that, after downloading the HPO OBO file will be updated with namespace information for each term (see [the Propagation module](#53-propagation-module-1)).~~On the other hand, information contained in the downloaded annotation files will be used for creation of the DiNGO compatible file. The new annotation file contains the gene and the associated HPO term in each line.~~
 
 #### 5.1.3. Uniprot mapping files
 
@@ -127,7 +128,7 @@ The update module uses an HGNC REST web service to download all records with an 
 
 #### 5.1.6. Usage
 
-The application has three options. The option -f defines the file type that should be downloaded (GO, HPO, HUGO, UniProt, SwissProt) and this option is mandatory. The -sp option defines the species (GO and UniProt files) or namespace (HPO file). If not specified it will be assumed that the species is human (GO, UniProt) or that all HPO namespaces should be taken into consideration. The third option, -d, is used only with HPO and GO files. The option specifies which files will be updated: the ontology file (-d 1), annotation file (-d 2) or both files (-d 3). The example below shows how to download and update the GO ontology and annotation file:
+The application has three options. The option -f defines the file type that should be downloaded (GO, HPO, HUGO, UniProt, SwissProt) and this option is mandatory. The -sp option defines the species (GO and UniProt files) or namespace (HPO file). If not specified it will be assumed that the species is human (GO, UniProt) or that all HPO namespaces should be taken into consideration. The third option, -d, is used only with HPO and GO files. The option specifies which files will be updated: the ontology file (-d 1), annotation file (-d 2) or both files (-d 3). The latter two options work only for GO files. The example below shows how to download and update the GO ontology and annotation file:
 
 `java -cp Dingo.jar update.DiNGOFilesUpdater update -f GO -sp Mus_musculus -d 3`
 
@@ -152,6 +153,14 @@ Help is invoked in the following way:
 The propagation module’s function is to add namespace information to each term in the HPO OBO file. It can be invoked in the following way:
 
 `java -cp Dingo.jar propagation.Propagation -i <input HPO obo file> -o <output OBO file>`
+
+### 5.4. HPO annotation module
+
+This module creates flat HPO annotation file. To do so, it is necessary to manually download genes_to_phenotype.txt and phenotype.hpoa files from the following [link](https://hpo.jax.org/data/annotations). Afterward, the module can be invoked as follows:
+
+`java -cp Dingo.jar hpoannotation.HpoFlatAnnotationCreator -g <path/to/genes_to_phenotype.txt> -a <path/to/phenotype.hpoa>`
+
+This will create the annotation file. It is recommended to place the file in DiNGO's annotations folder, so that DiNGO treats it as default annotation file.
 
 ## 6. Usage examples
 Setting up DiNGO for enrichment analysis is straightforward. The following examples demonstrate common usage scenarios.

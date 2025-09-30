@@ -30,6 +30,24 @@ public class LocalFilesManager{
         this.logFile = logFile;
     }
 
+    public static Date convertStringToDate(String dateAsStr, String dateFormat) {
+
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+
+        Date date = null;
+
+        try
+        {
+            date = formatter.parse(dateAsStr);
+
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return date;
+
+    }
+
     /**
      * <p>Returns all files located in {@link #directory}</p>
      * @return String array containing names of all files

@@ -1,0 +1,9 @@
+package hpoannotation;
+
+public enum HpoOntology {
+    PHENOTYPIC_ABNORMALITY,
+    MODE_OF_INHERITANCE,
+    CLINICAL_COURSE,
+    CLINICAL_MODIFIER,
+    ALL_SUBONTOLOGIES;
+}

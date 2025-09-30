@@ -369,32 +369,19 @@ public final class BingoParameters {
     }
     
     private String getNamespaceFullName(){
-        String fullName;
-        switch(namespace){
-            case "O": fullName = "phenotypic_abnormality";
-                break;
-            case "I": fullName = "mode_of_inheritance";
-                break;
-            case "M": fullName = "clinical_modifier";
-                break;
-            case "C": fullName = "clinical_course";
-                break;
-            case "F": fullName = "frequency";
-                break;
-            case "MF": fullName = "molecular_function";
-                break;
-            case "BP": fullName = "biological_process";
-                break;
-            case "CC": fullName = "cellular_component";
-                break;
-            case "W": fullName = "---";
-                break;
-            
-            default: fullName = "unspecified";
-                break;
-        }
-        
-        return fullName;
+
+        return switch (namespace) {
+            case "P" -> "phenotypic_abnormality";
+            case "I" -> "mode_of_inheritance";
+            case "M" -> "clinical_modifier";
+            case "C" -> "clinical_course";
+            case "F" -> "frequency";
+            case "MF" -> "molecular_function";
+            case "BP" -> "biological_process";
+            case "CC" -> "cellular_component";
+            case "W" -> "---";
+            default -> "unspecified";
+        };
     }
    
     /**
@@ -414,7 +401,7 @@ public final class BingoParameters {
         System.out.printf("%-30s%s%n", "                          ", "2 binomial [default: 1]\n");
         System.out.printf("%-30s%s%n", "    -rs <reference set>", "1 whole annotation");
         System.out.printf("%-30s%s%n", "                       ", "custom reference set [default: 1]\n");
-        System.out.printf("%-30s%s%n", "    -ns <namespace>", "O phenotypic abnormality (HPO)");
+        System.out.printf("%-30s%s%n", "    -ns <namespace>", "P phenotypic abnormality (HPO)");
         System.out.printf("%-30s%s%n", "                   ", "I mode of inheritance (HPO)");
         System.out.printf("%-30s%s%n", "                   ", "M clinical modifier (HPO)");
         System.out.printf("%-30s%s%n", "                   ", "C clinical course (HPO)");
@@ -426,7 +413,7 @@ public final class BingoParameters {
         System.out.printf("%-30s%s%n", "    -af <annotation file>", "Requires gaf or flat file format [default: DiNGO default annotation file]\n");
         System.out.printf("%-30s%s%n", "    -dc <delete codes>", "Evidence codes\n");
         System.out.printf("%-30s%s%n", "    -sf <folder>", "Folder where results will be saved [default: ./]\n");
-        System.out.printf("%-30s%s%n", "    -p <significance level>", "Defines treshold value [default: 0.05]\n");
+        System.out.printf("%-30s%s%n", "    -p <significance level>", "Defines threshold value [default: 0.05]\n");
         System.out.printf("%-30s%s%n", "    -e <name of ontology>", "HPO or GO [default: GO]\n");
         System.out.printf("%-30s%s%n", "    -t <number of threads>", "Number of threads (works only for batch mode) [default: 1]\n");
         System.out.printf("%-30s%s%n", "    -s <species>", "Name of species\n");

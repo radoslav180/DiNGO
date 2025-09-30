@@ -125,7 +125,7 @@ public class HypergeometricDistribution implements IDistribution{
             //mode of distribution, integer division (returns integer <= double result)!
             int mode = (bigX + 1) * (n + 1) / (bigN + 2);
             int i;
-            int newX = (isOver == false) ? x + 1 : x;
+            int newX = (!isOver) ? x + 1 : x;
            
             if (newX >= mode) {
                 i = newX;
@@ -134,7 +134,7 @@ public class HypergeometricDistribution implements IDistribution{
                     sum = sum + pdfi;
                     i++;
                 }
-                if(isOver == false) sum = 1 - sum;
+                if(!isOver) sum = 1 - sum;
             } else {
                 i = newX - 1;
                 while ((bigN - n >= bigX - i) && (i >= 0)) {
@@ -142,11 +142,11 @@ public class HypergeometricDistribution implements IDistribution{
                     sum = sum + pdfi;
                     i--;
                 }
-                if(isOver == true) sum = 1 - sum;
+                if(isOver) sum = 1 - sum;
             }
-            return (new Double(sum)).toString();
+            return String.valueOf(sum);
         } else {
-            return (new Double(1)).toString();
+            return String.valueOf(1);
         }
     }
     

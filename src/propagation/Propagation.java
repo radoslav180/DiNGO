@@ -170,7 +170,7 @@ public class Propagation {
             }
         }
 
-        if(iFile.length() == 0){
+        if(iFile.isEmpty()){
             System.out.println("Please specify HPO OBO file!");
             return;
         }

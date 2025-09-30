@@ -8,7 +8,7 @@ public class StatisticsDescriptor {
     private String test;
     //correction method
     private String correctionTest;
-    //over or under representation
+    //over or under-representation
     private String representation;
     //p value
     private String pValue;
